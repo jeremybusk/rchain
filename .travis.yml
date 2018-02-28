@@ -10,7 +10,7 @@ services:
     #docker exec rchain-dev sh -c "mkdir -p /src/rchain; cd /src/rchain; /src/rchain/scripts/ci-install-deps.sh"
     #- docker exec -it rchain-dev /bin/bash
 before_install:
-  - ls -lhat
+  - ls -lhat /
   - exit 
   - docker pull ubuntu:16.04 
   - docker run -d -it --name rchain-dev ubuntu:16.04
