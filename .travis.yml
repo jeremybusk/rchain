@@ -6,6 +6,7 @@ dist: trusty
 # env:
 #   - SUBPROJECT=rosette
 #   - SUBPROJECT=core
+#
 script:
   - ./scripts/build-subprojects.sh
 sudo: required
