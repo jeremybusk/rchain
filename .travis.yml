@@ -18,12 +18,13 @@ services:
     #- docker exec rchain-dev sh -c "mkdir -p /src/rchain"
     #- docker cp . rchain-dev:/src/rchain/
     # - docker pull ubuntu:16.04 
+    #   - docker run -d \
+    #         -it \
+    #         --name rchain-dev \
+    #         -v "$(pwd):/src/rchain" \
+    #         ubuntu:16.04
 before_install:
-  - docker run -d \
-        -it \
-        --name rchain-dev \
-        -v "$(pwd):/src/rchain" \
-        ubuntu:16.04
+  - docker run -d -it --name rchain-dev -v "$(pwd):/src/rchain" ubuntu:16.04
   - docker exec rchain-dev sh -c "cd /src/rchain; /src/rchain/scripts/ci-install-deps.sh"
   - docker exec rchain-dev sh -c "cd /src/rchain; /src/rchain/scripts/ci-build-subprojects.sh" 
 
