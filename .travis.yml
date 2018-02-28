@@ -11,17 +11,28 @@ services:
     #- docker exec -it rchain-dev /bin/bash
     #- echo $TRAVIS_REPO_SLUG
     #- ls -lhat 
+
+
+
+#   - docker ps -a
+#   - docker exec -it rchain-dev sh -c "pwd"
+#   - exit
+
 before_install:
   - docker pull ubuntu:16.04 
   - docker run -d -it --name rchain-dev ubuntu:16.04
-  - docker ps -a
-  - docker exec -it rchain-dev sh -c "pwd"
-  - exit
   - docker exec rchain-dev sh -c "mkdir -p /src/rchain"
   - docker cp . rchain-dev:/src/rchain/
+  - docker run -d \
+        -it \
+        --name ${container_name} \
+        -v "$(pwd):/src/rchain" \
+        ubuntu:16.04
   - docker exec rchain-dev sh -c "cd /src/rchain; /src/rchain/scripts/ci-install-deps.sh"
-install:
   - docker exec rchain-dev sh -c "cd /src/rchain; /src/rchain/scripts/ci-build-subprojects.sh" 
+
+install:
+  - echo "install"
 cache:
   directories:
     - "$HOME/.ivy2/cache"
