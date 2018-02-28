@@ -9,16 +9,14 @@ services:
 
     #docker exec rchain-dev sh -c "mkdir -p /src/rchain; cd /src/rchain; /src/rchain/scripts/ci-install-deps.sh"
     #- docker exec -it rchain-dev /bin/bash
+    #- echo $TRAVIS_REPO_SLUG
 before_install:
-  - echo $TRAVIS_REPO_SLUG
-  - sleep 10 
   - ls -lhat 
-  - exit 
   - docker pull ubuntu:16.04 
   - docker run -d -it --name rchain-dev ubuntu:16.04
   - docker ps -a
   - docker exec rchain-dev sh -c "mkdir -p /src/rchain"
-  - docker exec rchain-dev sh -c "cp * /src/rchain/"
+  - docker exec rchain-dev sh -c "cp ./* /src/rchain/"
   - docker exec rchain-dev sh -c "cd /src/rchain; /src/rchain/scripts/ci-install-deps.sh"
 install:
   - ./scripts/ci-install-deps.sh
