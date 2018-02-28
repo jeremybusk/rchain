@@ -1,7 +1,3 @@
-language: scala
-scala:
-  - 2.12.4
-sbt_args: -no-colors
 dist: trusty
 sudo: required
 services:
@@ -21,8 +17,8 @@ services:
     #- docker run -d -it --name rchain-dev ubuntu:16.04
     #- docker exec rchain-dev sh -c "mkdir -p /src/rchain"
     #- docker cp . rchain-dev:/src/rchain/
+    # - docker pull ubuntu:16.04 
 before_install:
-  - docker pull ubuntu:16.04 
   - docker run -d \
         -it \
         --name rchain-dev \
