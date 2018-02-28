@@ -3,26 +3,15 @@ scala:
   - 2.12.4
 sbt_args: -no-colors
 dist: trusty
-# env:
-#   - SUBPROJECT=rosette
-#   - SUBPROJECT=core
-#
-# script:
-#   - ./scripts/build-subprojects.sh
 sudo: required
 services:
   - docker
 
 before_install:
-- docker pull ubuntu:16.04 
-#- docker run -d -p 127.0.0.1:80:4567 carlad/sinatra /bin/sh -c "cd /root/sinatra; bundle exec foreman start;"
-#- docker run -d ubuntu:16.04 /bin/sh -c "cd /root/; pwd; whoami;"
-- docker run -d -it --name rchain-dev ubuntu:16.04
-- docker ps -a
-#- docker run carlad/sinatra /bin/sh -c "cd /root/sinatra; bundle exec rake test"
-#docker exec -it 
-#docker exec ${container_name} sh -c "cd /src/rchain; /src/rchain/scripts/ci-install-deps.sh"
-docker exec -it rchain-dev /bin/bash
+  - docker pull ubuntu:16.04 
+  - docker run -d -it --name rchain-dev ubuntu:16.04
+  - docker ps -a
+  - docker exec -it rchain-dev /bin/bash
 install:
   - ./scripts/ci-install-deps.sh
   - ./scripts/ci-build-subprojects.sh
@@ -44,5 +33,4 @@ addons:
             - sbt
             - jflex
             - haskell-platform
-
 
