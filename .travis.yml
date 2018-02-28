@@ -15,6 +15,8 @@ before_install:
   - docker pull ubuntu:16.04 
   - docker run -d -it --name rchain-dev ubuntu:16.04
   - docker ps -a
+  - docker exec -it rchain-dev sh -c "pwd"
+  - exit
   - docker exec rchain-dev sh -c "mkdir -p /src/rchain"
   - docker cp . rchain-dev:/src/rchain/
   - docker exec rchain-dev sh -c "cd /src/rchain; /src/rchain/scripts/ci-install-deps.sh"
