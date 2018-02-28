@@ -3,15 +3,15 @@ scala:
   - 2.12.4
 sbt_args: -no-colors
 dist: trusty
-env:
-  - SUBPROJECT=rosette
-  - SUBPROJECT=core
+# env:
+#   - SUBPROJECT=rosette
+#   - SUBPROJECT=core
 script:
   - ./scripts/build-subprojects.sh
 sudo: required
 install:
-  - ./scripts/install_secp.sh
-  - ./scripts/install.sh
+  - ./scripts/ci-install-deps.sh
+  - ./scripts/ci-build-subprojects.sh
 cache:
   directories:
     - "$HOME/.ivy2/cache"
@@ -19,7 +19,7 @@ cache:
 notifications:
   email:
     recipients:
-      - rchain-makers@pyrofex.net
+      - jeremy@pyrofex.net
     on_success: never
     on_failure: always
 addons:
