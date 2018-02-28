@@ -19,8 +19,7 @@ before_install:
   - docker cp . rchain-dev:/src/rchain/
   - docker exec rchain-dev sh -c "cd /src/rchain; /src/rchain/scripts/ci-install-deps.sh"
 install:
-  - ./scripts/ci-install-deps.sh
-  - ./scripts/ci-build-subprojects.sh
+  - docker exec rchain-dev sh -c "cd /src/rchain; /src/rchain/scripts/ci-build-subprojects.sh" 
 cache:
   directories:
     - "$HOME/.ivy2/cache"
