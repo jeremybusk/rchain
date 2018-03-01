@@ -26,12 +26,15 @@ services:
     #         ubuntu:16.04
     #before_install:
 
+    # install:
+    #   - docker run -d -it --name prepared-dev-base -v "$(pwd):/src/rchain" ubuntu:16.04
+    #   - docker exec prepared-dev-base sh -c "cd /src/rchain; /src/rchain/scripts/ci-install-deps.sh"
+    #   - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD";
+    #   - docker commit -m "updated" -a "Jeremy Busk" prepared-dev-base $DOCKER_USERNAME/prepared-dev-base:latest
+    #   - docker push "$DOCKER_USERNAME/prepared-dev-base"
+    #   - docker exec prepared-dev-base sh -c "cd /src/rchain; /src/rchain/scripts/ci-build-subprojects.sh" 
 install:
-  - docker run -d -it --name prepared-dev-base -v "$(pwd):/src/rchain" ubuntu:16.04
-  - docker exec prepared-dev-base sh -c "cd /src/rchain; /src/rchain/scripts/ci-install-deps.sh"
-  - docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD";
-  - docker commit -m "updated" -a "Jeremy Busk" prepared-dev-base $DOCKER_USERNAME/prepared-dev-base:latest
-  - docker push "$DOCKER_USERNAME/prepared-dev-base"
+  - docker run -d -it --name prepared-dev-base -v "$(pwd):/src/rchain" jeremybusk:prepared-dev-base
   - docker exec prepared-dev-base sh -c "cd /src/rchain; /src/rchain/scripts/ci-build-subprojects.sh" 
 cache:
   directories:
