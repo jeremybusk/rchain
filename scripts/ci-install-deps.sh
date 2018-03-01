@@ -68,13 +68,13 @@ cd bnfc/source
 ${sudo} cabal install --global
 cd ${project_root}
 
-## Install Scala 2.12.4	+## Install sbt
-scala_version="2.12.4"	
-${sudo} apt-get remove scala-library scala -yqq	
-curl --location --output /tmp/scala-${scala_version}.deb http://scala-lang.org/files/archive/scala-${scala_version}.deb 	
-${sudo} dpkg -i /tmp/scala-${scala_version}.deb	
-${sudo} apt-get update -yqq	
-${sudo} apt-get install scala -yqq
+# ## Install Scala 2.12.4	+## Install sbt
+# scala_version="2.12.4"	
+# ${sudo} apt-get remove scala-library scala -yqq	
+# curl --location --output /tmp/scala-${scala_version}.deb http://scala-lang.org/files/archive/scala-${scala_version}.deb 	
+# ${sudo} dpkg -i /tmp/scala-${scala_version}.deb	
+# ${sudo} apt-get update -yqq	
+# ${sudo} apt-get install scala -yqq
 
 ## Install sbt
 ${sudo} apt-get install apt-transport-https -yqq
