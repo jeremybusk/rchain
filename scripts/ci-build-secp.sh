@@ -4,6 +4,8 @@
 ## Set BASH environment so it will fail properly throwing exit code
 set -euxo pipefail
 
+project_root=$(pwd)
+
 ## Detect if running in docker container - setup using sudo accordingly
 if [[ $(cat /proc/self/cgroup  | grep docker) = *docker* ]]; then
     echo "Running in docker container!"
