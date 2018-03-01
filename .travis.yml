@@ -25,7 +25,9 @@ services:
     #         -v "$(pwd):/src/rchain" \
     #         ubuntu:16.04
 before_install:
-  - docker run -d -it --name prepared-dev-base -v "$(pwd):/src/rchain" jeremybusk/prepared-dev-base:latest
+    #- docker run -d -it --name prepared-dev-base -v "$(pwd):/src/rchain" jeremybusk/prepared-dev-base:latest
+  - docker run -d -it --name prepared-dev-base -v "$(pwd):/src/rchain" ubuntu:16.04
+  - docker exec prepared-dev-base sh -c "cd /src/rchain; /src/rchain/scripts/ci-install-deps.sh"
 
     # install:
     #   - docker run -d -it --name prepared-dev-base -v "$(pwd):/src/rchain" ubuntu:16.04
