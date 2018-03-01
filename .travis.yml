@@ -26,7 +26,7 @@ env:
     #         --name rchain-dev \
     #         -v "$(pwd):/src/rchain" \
     #         ubuntu:16.04
-prepare:
+before_install:
     #- docker run -d -it --name prepared-dev-base -v "$(pwd):/src/rchain" jeremybusk/prepared-dev-base:latest
   - docker run -d -it --name "$container_name" -v "$(pwd):/src/rchain" ubuntu:16.04
   - docker exec "$container_name" sh -c "cd /src/rchain; /src/rchain/scripts/ci-install-deps.sh"
@@ -39,7 +39,7 @@ prepare:
     #   - docker push "$DOCKER_USERNAME/prepared-dev-base"
     #   - docker exec prepared-dev-base sh -c "cd /src/rchain; /src/rchain/scripts/ci-build-subprojects.sh" 
     #
-build:
+install:
   - docker exec "$container_name" sh -c "cd /src/rchain; /src/rchain/scripts/ci-build-secp.sh" 
   - docker exec "$container_name" sh -c "cd /src/rchain; /src/rchain/scripts/ci-build-subprojects.sh" 
 cache:
