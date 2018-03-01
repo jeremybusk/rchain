@@ -3,6 +3,8 @@ dist: trusty
 sudo: required
 services:
   - docker
+env:
+  - container_name=rchain-dev
 
     #docker exec rchain-dev sh -c "mkdir -p /src/rchain; cd /src/rchain; /src/rchain/scripts/ci-install-deps.sh"
     #- docker exec -it rchain-dev /bin/bash
@@ -24,10 +26,10 @@ services:
     #         --name rchain-dev \
     #         -v "$(pwd):/src/rchain" \
     #         ubuntu:16.04
-before_install:
+prepare_docker_image:
     #- docker run -d -it --name prepared-dev-base -v "$(pwd):/src/rchain" jeremybusk/prepared-dev-base:latest
-  - docker run -d -it --name prepared-dev-base -v "$(pwd):/src/rchain" ubuntu:16.04
-  - docker exec prepared-dev-base sh -c "cd /src/rchain; /src/rchain/scripts/ci-install-deps.sh"
+  - docker run -d -it --name "$container_name" -v "$(pwd):/src/rchain" ubuntu:16.04
+  - docker exec "$container_name" sh -c "cd /src/rchain; /src/rchain/scripts/ci-install-deps.sh"
 
     # install:
     #   - docker run -d -it --name prepared-dev-base -v "$(pwd):/src/rchain" ubuntu:16.04
@@ -37,9 +39,9 @@ before_install:
     #   - docker push "$DOCKER_USERNAME/prepared-dev-base"
     #   - docker exec prepared-dev-base sh -c "cd /src/rchain; /src/rchain/scripts/ci-build-subprojects.sh" 
     #
-install:
-  - docker exec prepared-dev-base sh -c "cd /src/rchain; /src/rchain/scripts/ci-build-secp.sh" 
-  - docker exec prepared-dev-base sh -c "cd /src/rchain; /src/rchain/scripts/ci-build-subprojects.sh" 
+build:
+  - docker exec "$container_name" sh -c "cd /src/rchain; /src/rchain/scripts/ci-build-secp.sh" 
+  - docker exec "$container_name" sh -c "cd /src/rchain; /src/rchain/scripts/ci-build-subprojects.sh" 
 cache:
   directories:
     - "$HOME/.ivy2/cache"

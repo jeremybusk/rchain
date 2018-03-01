@@ -41,18 +41,18 @@ ${sudo} apt-get update -yqq
 # ${sudo} apt-get install default-jdk -yqq # alternate jdk install 
 ${sudo} apt-get install openjdk-8-jdk -yqq
 
-## Install needed crypto
-${sudo} apt-get install autoconf libtool -yqq
-cd crypto
-if [ -d "secp256k1" ]; then
-    rm -rf secp256k1 
-fi
-git clone https://github.com/bitcoin-core/secp256k1
-cd secp256k1
-./autogen.sh
-./configure --enable-jni --enable-experimental --enable-module-schnorr --enable-module-ecdh --prefix=$PWD/.tmp
-make install
-cd ${project_root}
+# ## Install needed crypto
+# ${sudo} apt-get install autoconf libtool -yqq
+# cd crypto
+# if [ -d "secp256k1" ]; then
+#     rm -rf secp256k1 
+# fi
+# git clone https://github.com/bitcoin-core/secp256k1
+# cd secp256k1
+# ./autogen.sh
+# ./configure --enable-jni --enable-experimental --enable-module-schnorr --enable-module-ecdh --prefix=$PWD/.tmp
+# make install
+# cd ${project_root}
 
 ## Install Haskell Platform
 # ref: https://www.haskell.org/platform/#linux-ubuntu
