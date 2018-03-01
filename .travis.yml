@@ -26,7 +26,7 @@ env:
     #         --name rchain-dev \
     #         -v "$(pwd):/src/rchain" \
     #         ubuntu:16.04
-prepare_docker_image:
+prepare:
     #- docker run -d -it --name prepared-dev-base -v "$(pwd):/src/rchain" jeremybusk/prepared-dev-base:latest
   - docker run -d -it --name "$container_name" -v "$(pwd):/src/rchain" ubuntu:16.04
   - docker exec "$container_name" sh -c "cd /src/rchain; /src/rchain/scripts/ci-install-deps.sh"
