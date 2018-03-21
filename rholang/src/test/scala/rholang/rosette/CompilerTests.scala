@@ -33,5 +33,20 @@ class CompilerTests extends FunSuite {
           .map(Rholang2RosetteCompiler.serialize)
           .isEmpty)
     }
+
+  // Use rosette to test rholang compiled rbls 
+  for (file <- testFiles if file.getFileName.toString.endsWith(".rho")) {
+    test(file.toString) {
+      assert(
+        Rholang2RosetteCompiler
+          .compile(file.toString)
+          .map(Rholang2RosetteCompiler.serialize)
+          .isDefined)
+		  .(try (Writer writer = new BufferedWriter(new OutputStreamWriter(
+              new FileOutputStream("/tmp/somefile.rho"), "utf-8"))) {
+                writer.write("something");
+			  }
+          )
+    }
   }
 }
