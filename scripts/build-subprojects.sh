@@ -1,6 +1,8 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-set -e
+# Set BASH environment so it will properly fail throwing exit code
+set -euxo pipefail
+
 
 if [ -d "${SUBPROJECT}" -a -f "${SUBPROJECT}/build.sh" ]; then
     echo "${SUBPROJECT}/build.sh"
@@ -18,7 +20,10 @@ elif [ -f "build.sbt" ]; then
 	ulimit -s unlimited
 	export ESS_SYSDIR=rosette/rbl/rosette
 	for rbl_file in $(ls rholang/tests/*rbl); do
+        echo "=="
 		out=$(./rosette/build.out/src/rosette --quiet --boot-dir=rosette/rbl/rosette --boot=boot.rbl ${rbl_file} | grep ^Pass)
+        echo "=="
+        echo ${out}
 		if [ -z $out ]; then
 			echo "[error] - rbl file ${rbl_file} did not return \"Pass\""
 			exit 1
