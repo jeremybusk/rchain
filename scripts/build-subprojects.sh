@@ -11,6 +11,7 @@ elif [ -f "build.sbt" ]; then
     sbt -Dsbt.log.noformat=true clean bnfc:generate coverage test coverageReport rpm:packageBin debian:packageBin
     echo "jtest"
     ls -laht /tmp/*
+    ls -laht /tmp/hello.txt
     echo "jtest"
     exit 0
     cd rosette 

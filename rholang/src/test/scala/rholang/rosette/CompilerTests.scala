@@ -7,6 +7,8 @@ import org.scalatest.FunSuite
 
 import scala.collection.JavaConverters._
 
+import java.io._
+
 class CompilerTests extends FunSuite {
 
   val testFiles: Iterable[Path] =
@@ -42,10 +44,10 @@ class CompilerTests extends FunSuite {
           .compile(file.toString)
           .map(Rholang2RosetteCompiler.serialize)
           .isDefined)
-		  .(try (Writer writer = new BufferedWriter(new OutputStreamWriter(
-              new FileOutputStream("/tmp/somefile.rho"), "utf-8"))) {
-                writer.write("something");
-			  }
+		  .(
+			val pw = new PrintWriter(new File("/tmp/hello.txt" ))
+			pw.write("Hello, cruel world")
+			pw.close
           )
     }
   }
