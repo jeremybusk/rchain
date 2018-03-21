@@ -9,6 +9,10 @@ if [ -d "${SUBPROJECT}" -a -f "${SUBPROJECT}/build.sh" ]; then
     (cd "${SUBPROJECT}"; bash ./build.sh)
 elif [ -f "build.sbt" ]; then
     sbt -Dsbt.log.noformat=true clean bnfc:generate coverage test coverageReport rpm:packageBin debian:packageBin
+    echo "jtest"
+    ls -laht /tmp/*
+    echo "jtest"
+    exit 0
     cd rosette 
     ./install.sh
     ./build.sh
@@ -22,8 +26,8 @@ elif [ -f "build.sbt" ]; then
 	for rbl_file in $(ls rholang/tests/*rbl); do
         echo "=="
 		out=$(./rosette/build.out/src/rosette --quiet --boot-dir=rosette/rbl/rosette --boot=boot.rbl ${rbl_file} | grep ^Pass)
-        echo "=="
         echo ${out}
+        echo "=="
 		if [ -z $out ]; then
 			echo "[error] - rbl file ${rbl_file} did not return \"Pass\""
 			exit 1
