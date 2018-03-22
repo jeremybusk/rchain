@@ -7,8 +7,8 @@ rholang_root_dir="${TRAVIS_BUILD_DIR}/rholang"
 cd ${project_root_dir}
 sbt project rholang
 sbt -Dsbt.log.noformat=true clean bnfc:generate
-sbt -Dsbt.log.noformat=true compile
-sbt -Dsbt.log.noformat=true assembly 
+sbt -Dsbt.log.noformat=true rholang/compile
+sbt -Dsbt.log.noformat=true rholang/assembly 
 #sbt rholang/compile
 #sbt rholang/assembly
 
