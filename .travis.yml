@@ -8,6 +8,7 @@ env:
   - SUBPROJECT=core
 script:
   - ./scripts/build-subprojects.sh
+  - ./ci/rholang-main.sh
 sudo: required
 install:
   - ./scripts/install_secp.sh

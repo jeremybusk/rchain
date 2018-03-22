@@ -5,8 +5,12 @@ project_root_dir="${TRAVIS_BUILD_DIR}"
 rosette_root_dir="${TRAVIS_BUILD_DIR}/rosette"
 rholang_root_dir="${TRAVIS_BUILD_DIR}/rholang"
 cd ${project_root_dir}
-sbt rholang/compile
-sbt rholang/assembly
+sbt project rholang
+sbt -Dsbt.log.noformat=true clean bnfc:generate
+sbt -Dsbt.log.noformat=true compile
+sbt -Dsbt.log.noformat=true assembly 
+#sbt rholang/compile
+#sbt rholang/assembly
 
 
 jar=$(ls -t ${rholang_root_dir}/target/scala*/*.jar | head -1)
