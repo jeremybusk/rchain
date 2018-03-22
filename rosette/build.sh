@@ -1,12 +1,11 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # Copyright (c) 2017, Pyrofex Corporation.
 # Author: Nash E. Foster <leaf@pyrofex.net>
 #
 # Build third-party libraries.
 #
-set -e
-set -x
+set -euxo pipefail
 
 THIRD_PARTY_BUILD="${1:-build.third-party}"
 DEF_PFX="$(readlink -f $(pwd))/build.out"
