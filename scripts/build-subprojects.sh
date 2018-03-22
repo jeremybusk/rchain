@@ -15,6 +15,7 @@ elif [ -f "build.sbt" ]; then
     (cd "${rosette_root_dir}"; ./build.sh)
     sbt -Dsbt.log.noformat=true clean bnfc:generate coverage test coverageReport rpm:packageBin debian:packageBin
     ${project_root_dir}/ci/rholang-rho2rbl.sh
+    ${project_root_dir}/ci/test-rhoscala-rbls.sh
     ${project_root_dir}/ci/clean-up.sh
     for sub in crypto comm rholang roscala storage node; do
 	(bash <(curl -s https://codecov.io/bash) -X gcov -s ./$sub -c -F $sub)

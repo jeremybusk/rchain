@@ -1,9 +1,14 @@
 #!/usr/bin/env bash
 
 set -euxo pipefail
-
+project_root_dir="${TRAVIS_BUILD_DIR}"
+rosette_root_dir="${TRAVIS_BUILD_DIR}/rosette"
 rholang_root_dir="${TRAVIS_BUILD_DIR}/rholang"
-#rholang_root_dir="rholang"
+cd ${project_root_dir}
+sbt rholang/compile
+sbt rholang/assembly
+
+
 jar=$(ls -t ${rholang_root_dir}/target/scala*/*.jar | head -1)
 # the above is usually file like rholang/target/scala-2.12/rholang-assembly-0.1.0-SNAPSHOT.jar
 
