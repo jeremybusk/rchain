@@ -46,9 +46,6 @@ matrix:
     scala: 2.12.4
     sbt_args: -no-colors
     install:
-      - ./scripts/install_secp.sh
-      - ./scripts/install_sodium.sh
-      - ./scripts/install_bnfc.sh
       - ./scripts/rnode-dockerhub-push.sh
     addons:
       apt:
@@ -90,4 +87,4 @@ notifications:
   email:
     recipients: rchain-makers@pyrofex.net
     on_success: never
-    on_failure: always
+    on_failure: never 
