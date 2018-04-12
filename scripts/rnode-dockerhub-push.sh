@@ -20,7 +20,7 @@ if [[ "${TRAVIS_BRANCH}" = "master" || \
       "${TRAVIS_BRANCH}" = "dev" || \
       "${TRAVIS_BRANCH}" = "rnode-docker-push-fix" || \
       "${TRAVIS_BRANCH}" = "ops-test" ]] \
-&& [[ "${DOCKER_USERNAME}" && "${DOCKER_PASSWORD}"  && "${TRAVIS_REPO_SLUG}" = "jeremybusk/rchain" ]] ; then
+&& [[ "${DOCKER_USERNAME}" && "${DOCKER_PASSWORD}"  && "${TRAVIS_REPO_SLUG}" = "jjeremybusk/rchain" ]] ; then
 #&& [[ "${TRAVIS_PULL_REQUEST}" = "false" && "${TRAVIS_REPO_SLUG}" = "rchain/rchain" ]] ; then
 
     # Generate RChain "RNode" network node docker container
