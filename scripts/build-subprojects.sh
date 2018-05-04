@@ -34,7 +34,7 @@ case "$SUBPROJECT" in "rosette")
 
 "p2p-test-network")
 
-    ./scripts/p2p-test-network.sh
+    #./scripts/p2p-test-network.sh
     ;;
 
 "cloud-p2p-test-network")
