@@ -34,7 +34,10 @@ case "$SUBPROJECT" in "rosette")
 
 "p2p-test-network")
 
-    sudo apt-get -yq install python3-minimal python3-pip
+    #sudo apt-get -yq install python3-minimal python3-pip
+	sudo add-apt-repository ppa:jonathonf/python-3.6
+	sudo apt-get update
+	sudo apt-get install python3.6
     sudo pip3 install argparse pexpect
     ./scripts/p2p-test-network.sh
     ;;
