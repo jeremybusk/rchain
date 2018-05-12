@@ -38,9 +38,15 @@ build:p2p-test-network:
     - apk add git 
     - apk add sudo
     - apk add bash 
-    - apk add python3 
     - apk add cmake 
     - apk add cabal 
+    - apk add autoreconf 
+    - apk add sbt 
+    - apk add jflex 
+    - apk add rpm 
+    - apk add fakeroot 
+      #- apk add g++ 
+    - apk add python3 
     - sudo pip3 install argparse docker pexpect
     - ./scripts/install_secp.sh
     - ./scripts/install_sodium.sh
