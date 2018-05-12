@@ -30,7 +30,7 @@
 
 
 build:rosette:
-  image: nixos:nix
+  image: nixos/nix
   script:
     - cd rosette
     - ./install.sh 
