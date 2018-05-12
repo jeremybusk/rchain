@@ -34,10 +34,16 @@ build:p2p-test-network:
     #- ./scripts/install_deps_ubuntu1604.sh 
     #- sudo apt-get -yq install python3-minimal python3-pexpect python3-pip
     #- apt-get -yq install sudo
+    - apk update 
     - apk add sudo
     - apk add bash 
     - apk add python3 
+    - apk add cmake 
+    - apk add cabal 
     - sudo pip3 install argparse docker pexpect
+    - ./scripts/install_secp.sh
+    - ./scripts/install_sodium.sh
+    - ./scripts/install_bnfc.sh
     - ./scripts/p2p-test-network.sh
 
   # build:test_artifact_creation:
