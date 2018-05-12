@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Header for scripts - use two lines below to use in scripts
+# Generalized header for scripts - use two lines below to use in scripts
 #export PATH=$PATH:$(pwd -P)/scripts
 #source header.sh
 
