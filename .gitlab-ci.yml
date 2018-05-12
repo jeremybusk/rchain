@@ -15,7 +15,8 @@ stages:
 
 build:p2p-test-network:
   stage: build
-  image: docker:stable
+  #image: docker:stable
+  image: ubuntu:xenial 
 
   # When using dind, it's wise to use the overlayfs driver for
   # improved performance.
@@ -29,7 +30,7 @@ build:p2p-test-network:
   - docker info
 
   script:
-    #- ./scripts/install_docker.sh 
+    - ./scripts/install_docker.sh 
     #- ./scripts/install_deps_ubuntu1604.sh 
     #- sudo apt-get -yq install python3-minimal python3-pexpect python3-pip
     - apt-get -yq install sudo
