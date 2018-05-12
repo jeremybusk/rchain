@@ -33,9 +33,10 @@ build:rosette:
   image: nixos/nix
   script:
     - cd rosette
-    - ./install.sh 
+    - nix-build
+    - ./run.sh rbl/rosette/tests/simple_add.rbl
 
-build:p2p-test-network_:
+build:p2p-test-network:
   image: ubuntu:xenial 
   script:
     - ./scripts/install_deps_ubuntu1604.sh 

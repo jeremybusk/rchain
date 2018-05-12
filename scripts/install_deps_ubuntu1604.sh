@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 apt-get update -y
-apt-get install sudo
-sudo whoami
-exit
+apt-get install sudo -y
 apt-get install openjdk-8-jdk -y
 apt-get install apt-transport-https -y
 ## Install SBT
