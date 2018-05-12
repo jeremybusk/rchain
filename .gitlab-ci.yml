@@ -1,110 +1,49 @@
-# image: ubuntu:xenial
-# 
-# stages:
-#   - test
-#   - deploy
-
-# before_script:
-#   - apt-get update -y
-#   - apt-get install openjdk-8-jdk -y
-#   - apt-get install apt-transport-https -y
-#   ## Install SBT
-#   - echo "deb http://dl.bintray.com/sbt/debian /" | tee -a /etc/apt/sources.list.d/sbt.list
-#   - apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 642AC823
-#   - apt-get update -y
-#   - apt-get install sbt -y
-#   - sbt sbt-version
-#   - apt-get install jflex -y
-#   - apt-get install haskell-platform -y
-#   - apt-get install rpm -y
-#   - apt-get install fakeroot -y
-#   # Install deps
-#   - ./scripts/install_secp.sh
-#   - ./scripts/install_sodium.sh
-#     #- ./scripts/install.sh
-
-# test:
-#   stage: test
-#   script:
-#     - sbt clean coverage test coverageReport
 stages:
   - build
+  - test
   - deploy
 
 
-build:rosette:
-  stage: build
-  image: nixos/nix
-  script:
-    - cd rosette
-    - nix-build
-    - ./run.sh rbl/rosette/tests/simple_add.rbl
+# build:rosette:
+#   stage: build
+#   image: nixos/nix
+#   script:
+#     - cd rosette
+#     - nix-build
+#     - ./run.sh rbl/rosette/tests/simple_add.rbl
 
 build:p2p-test-network:
   stage: build
-  image: docker:stable 
+  #image: docker:stable 
+  image: ubuntu:xenial 
   script:
-    - docker info
+    - ./scripts/install_docker.sh 
     - ./scripts/install_deps_ubuntu1604.sh 
     - sudo apt-get -yq install python3-minimal python3-pexpect python3-pip
     - sudo pip3 install argparse
     - ./scripts/p2p-test-network.sh
 
-build:test_artifact_creation:
-  stage: build 
-  image: ubuntu:xenial 
-  script:
-    - ./scripts/install_deps_ubuntu1604.sh 
-    - sbt -Dsbt.log.noformat=true clean rholang/bnfc:generate node/debian:packageBin node/rpm:packageBin node/universal:packageZipTarball
-
-build:core:
-  stage: build
-  image: ubuntu:xenial 
-  script:
-    - ./scripts/install_deps_ubuntu1604.sh 
-    - ./scripts/build_core.sh
-    #- sbt -Dsbt.log.noformat=true clean rholang/bnfc:generate node/debian:packageBin node/rpm:packageBin node/universal:packageZipTarball
-#   when:
-#     on_success:
-#   script:
-#   - sbt -Dsbt.log.noformat=true clean rholang/bnfc:generate node/debian:packageBin node/rpm:packageBin node/universal:packageZipTarball 
-# 
-# # Create artifacts
-# deploy:
-#   stage: deploy
-#   when:
-#     on_success:
-#     - build:rosette 
-#     - build:core 
-#     - build:p2p-test-network
-#   script:
-#   - sbt -Dsbt.log.noformat=true clean rholang/bnfc:generate node/debian:packageBin node/rpm:packageBin node/universal:packageZipTarball 
-# deploy:
-#   stage: deploy
-#   when:
-#     on_success:
-#     - build:rosette 
-#     - build:core 
-#     - build:p2p-test-network
-#   artifacts:
-#     paths:
-#     - public
-#   only:
-#   - master
-#   - dev
-#   script:
-#   - sbt -Dsbt.log.noformat=true clean rholang/bnfc:generate node/debian:packageBin node/rpm:packageBin node/universal:packageZipTarball 
-# #   only:
-#     refs:
-#       - master
-#       - schedules
-deploy:
-  stage: deploy
-  artifacts:
-    paths:
-    - public
-  only:
-  - master
-  - dev
-  script:
-  - sbt -Dsbt.log.noformat=true clean rholang/bnfc:generate node/debian:packageBin node/rpm:packageBin node/universal:packageZipTarball 
+  # build:test_artifact_creation:
+  #   stage: build 
+  #   image: ubuntu:xenial 
+  #   script:
+  #     - ./scripts/install_deps_ubuntu1604.sh 
+  #     - sbt -Dsbt.log.noformat=true clean rholang/bnfc:generate node/debian:packageBin node/rpm:packageBin node/universal:packageZipTarball
+  # 
+  # build:core:
+  #   stage: build
+  #   image: ubuntu:xenial 
+  #   script:
+  #     - ./scripts/install_deps_ubuntu1604.sh 
+  #     - ./scripts/build_core.sh
+  # 
+  # deploy:
+  #   stage: deploy
+  #   artifacts:
+  #     paths:
+  #     - public
+  #   only:
+  #   - master
+  #   - dev
+  #   script:
+  #   - sbt -Dsbt.log.noformat=true clean rholang/bnfc:generate node/debian:packageBin node/rpm:packageBin node/universal:packageZipTarball 
