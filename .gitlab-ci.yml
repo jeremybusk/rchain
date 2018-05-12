@@ -39,10 +39,10 @@ build:p2p-test-network:
     - apk add sudo
     - apk add bash 
     - apk add cabal 
+    - apk add ghc 
     - cabal update
     - cabal install alex happy mtl
     - apk add g++ cmake make automake autoconf libtool
-    - apk add ghc 
     - apk add flex 
     - apk add rpm 
     - apk add fakeroot 
