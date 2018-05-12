@@ -40,7 +40,9 @@ build:p2p-test-network:
     - apk add bash 
     - apk add cabal 
     - apk add ghc 
+    - apk add alpine-sdk
     - cabal update
+    - export LIBRARY_PATH=/usr/lib:$LIBRARY_PATH 
     - cabal install --global mtl
     - cabal install --global alex happy
       #- cabal install alex happy mtl
