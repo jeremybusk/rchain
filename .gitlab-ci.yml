@@ -40,12 +40,11 @@ build:p2p-test-network:
     - apk add bash 
     - apk add cmake 
     - apk add cabal 
-    - apk add autoreconf 
+    - apk add automake autoconf libtool
     - apk add sbt 
     - apk add jflex 
     - apk add rpm 
     - apk add fakeroot 
-    - apk add automake autoconf libtool
     - apk add python3 
     - sudo pip3 install argparse docker pexpect
     - ./scripts/install_secp.sh
