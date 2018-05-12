@@ -102,3 +102,4 @@ build:p2p-test-network:
   #   - dev
   #   script:
   #   - sbt -Dsbt.log.noformat=true clean rholang/bnfc:generate node/debian:packageBin node/rpm:packageBin node/universal:packageZipTarball 
+  #   test1
