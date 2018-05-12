@@ -45,6 +45,7 @@ build:p2p-test-network:
     - apk add jflex 
     - apk add rpm 
     - apk add fakeroot 
+    - apk add autoconf libtool #?no need for libtool secp
       #- apk add g++ 
     - apk add python3 
     - sudo pip3 install argparse docker pexpect
