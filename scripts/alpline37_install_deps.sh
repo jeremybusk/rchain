@@ -4,7 +4,7 @@ apk add sudo
 apk add bash 
 apk add cabal 
 apk add ghc 
-apk add alpine-sdk
+#apk add alpine-sdk
 cabal update
 export LIBRARY_PATH=/usr/lib:$LIBRARY_PATH 
 cabal install --global mtl

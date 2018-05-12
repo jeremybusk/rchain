@@ -26,6 +26,7 @@ build:p2p-test-network:
   #   - apk update 
 
   script:
+    - export JAVA_HOME="/usr/lib/jvm/java-1.8-openjdk"
     - ./scripts/alpline37_install_deps.sh
     - ./scripts/install_secp.sh
     - ./scripts/install_sodium.sh
