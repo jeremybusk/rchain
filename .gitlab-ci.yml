@@ -41,7 +41,8 @@ build:p2p-test-network:
     - apk add cabal 
     - apk add ghc 
     - cabal update
-    - cabal install alex happy mtl
+    - cabal install --global alex happy
+      #- cabal install alex happy mtl
     - apk add g++ cmake make automake autoconf libtool
     - apk add flex 
     - apk add rpm 
