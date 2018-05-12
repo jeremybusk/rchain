@@ -12,13 +12,25 @@ stages:
 #     - nix-build
 #     - ./run.sh rbl/rosette/tests/simple_add.rbl
 
+
 build:p2p-test-network:
   stage: build
-  #image: docker:stable 
-  image: ubuntu:xenial 
+  image: docker:stable
+
+  # When using dind, it's wise to use the overlayfs driver for
+  # improved performance.
+  variables:
+    DOCKER_DRIVER: overlay2
+
+  services:
+  - docker:dind
+
+  before_script:
+  - docker info
+
   script:
-    - ./scripts/install_docker.sh 
-    - ./scripts/install_deps_ubuntu1604.sh 
+    #- ./scripts/install_docker.sh 
+    #- ./scripts/install_deps_ubuntu1604.sh 
     - sudo apt-get -yq install python3-minimal python3-pexpect python3-pip
     - sudo pip3 install argparse
     - ./scripts/p2p-test-network.sh
