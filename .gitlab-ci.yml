@@ -45,8 +45,8 @@ build:p2p-test-network:
     - apk add jflex 
     - apk add rpm 
     - apk add fakeroot 
-    - apk add autoconf libtool #?no need for libtool secp
-      #- apk add g++ 
+    - apk add autoconf
+    - apk add libtool
     - apk add python3 
     - sudo pip3 install argparse docker pexpect
     - ./scripts/install_secp.sh
@@ -54,6 +54,8 @@ build:p2p-test-network:
     - ./scripts/install_bnfc.sh
     - ./scripts/p2p-test-network.sh
 
+      #- apk add g++ 
+      #- apk add autoconf libtool #?no need for libtool secp
   # build:test_artifact_creation:
   #   stage: build 
   #   image: ubuntu:xenial 
