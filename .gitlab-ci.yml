@@ -27,10 +27,10 @@ build:p2p-test-network:
   - docker:dind
 
   before_script:
+  - ./scripts/install_docker.sh 
   - docker info
 
   script:
-    - ./scripts/install_docker.sh 
     #- ./scripts/install_deps_ubuntu1604.sh 
     #- sudo apt-get -yq install python3-minimal python3-pexpect python3-pip
     - apt-get -yq install sudo
