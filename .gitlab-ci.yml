@@ -45,9 +45,19 @@ build:p2p-test-network:
     - export LIBRARY_PATH=/usr/lib:$LIBRARY_PATH 
     - cabal install --global mtl
     - cabal install --global alex happy
-      #- cabal install alex happy mtl
+      #- cabal install alex happy mtl --   apk add libc-dev??
     - apk add g++ cmake make automake autoconf libtool
+      # protobuf
+      #- apk add glibc 
+    - apk --no-cache add ca-certificates wget
+    - wget -q -O /etc/apk/keys/sgerrand.rsa.pub https://raw.githubusercontent.com/sgerrand/alpine-pkg-glibc/master/sgerrand.rsa.pub
+    - wget https://github.com/sgerrand/alpine-pkg-glibc/releases/download/2.27-r0/glibc-2.27-r0.apk
+    - apk add glibc-2.27-r0.apk
+    - wget http://jflex.de/release/jflex-1.6.1.tar.gz
+    - tar -C /usr/share -xvzf jflex-1.6.1.tar.gz
+    - ln -s /usr/share/jflex-1.6.1/bin/jflex /usr/bin/jflex
     - apk add flex 
+    - apk add flex-dev
     - apk add rpm 
     - apk add fakeroot 
     - apk add openjdk8
@@ -58,6 +68,7 @@ build:p2p-test-network:
     - ./scripts/install_secp.sh
     - ./scripts/install_sodium.sh
     - ./scripts/install_bnfc.sh
+    # sbt -Dsbt.log.noformat=true clean rholang/bnfc:generate node/docker
     - ./scripts/p2p-test-network.sh
 
       # - apk add jflex 
