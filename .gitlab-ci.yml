@@ -31,8 +31,10 @@ build:p2p-test-network:
   script:
     #- ./scripts/install_docker.sh 
     #- ./scripts/install_deps_ubuntu1604.sh 
-    - sudo apt-get -yq install python3-minimal python3-pexpect python3-pip
-    - sudo pip3 install argparse
+    #- sudo apt-get -yq install python3-minimal python3-pexpect python3-pip
+    - apt-get -yq install sudo
+    - sudo apt-get -yq install python3-minimal python3-pip
+    - sudo pip3 install argparse docker pexpect
     - ./scripts/p2p-test-network.sh
 
   # build:test_artifact_creation:
