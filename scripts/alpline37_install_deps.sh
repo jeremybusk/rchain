@@ -10,7 +10,7 @@ export LIBRARY_PATH=/usr/lib:$LIBRARY_PATH
 cabal install --global mtl
 cabal install --global alex happy
 #- cabal install alex happy mtl --   apk add libc-dev??
-apk add g++ cmake make automake autoconf libtool
+apk add g++ cmake make automake autoconf libtool libc-dev
 # protobuf
 #- apk add glibc 
 apk --no-cache add ca-certificates wget
