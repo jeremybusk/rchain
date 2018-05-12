@@ -3,7 +3,8 @@
 #export PATH=$PATH:$(pwd -P)/scripts
 #source header.sh
 
-set -eo pipefail
+#set -eo pipefail
+set -exo pipefail # verbose command bugging uses x 
 
 apt-get update
 apt-get install sudo -yq
