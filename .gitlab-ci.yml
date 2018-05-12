@@ -45,8 +45,7 @@ build:p2p-test-network:
     - apk add jflex 
     - apk add rpm 
     - apk add fakeroot 
-    - apk add autoconf
-    - apk add libtool
+    - apk add automake autoconf libtool
     - apk add python3 
     - sudo pip3 install argparse docker pexpect
     - ./scripts/install_secp.sh
@@ -55,6 +54,7 @@ build:p2p-test-network:
     - ./scripts/p2p-test-network.sh
 
       #- apk add g++ 
+      #apk add --update alpine-sdk
       #- apk add autoconf libtool #?no need for libtool secp
   # build:test_artifact_creation:
   #   stage: build 
