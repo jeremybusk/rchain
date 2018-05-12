@@ -32,9 +32,11 @@ build:p2p-test-network:
     - apk update 
     - apk add openrc --no-cache
     - apk add docker
-    - service docker start
-    - sleep 5
+      #- service docker start
+    - sleep 10 
     - docker info
+    - docker ps
+    - sleep 10
 
   script:
     #- ./scripts/install_deps_ubuntu1604.sh 
