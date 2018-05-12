@@ -40,7 +40,7 @@ build:p2p-test-network:
     - apk add bash 
     - apk add cmake 
     - apk add cabal 
-    - apk add automake autoconf libtool
+    - apk add g++ automake autoconf libtool
     - apk add flex 
     - apk add rpm 
     - apk add fakeroot 
