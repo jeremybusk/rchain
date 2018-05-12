@@ -42,12 +42,20 @@ build:rosette:
 
 build:p2p-test-network:
   stage: build
-  image: ubuntu:xenial 
+  image: docker:stable 
   script:
+    - docker info
     - ./scripts/install_deps_ubuntu1604.sh 
     - sudo apt-get -yq install python3-minimal python3-pexpect python3-pip
     - sudo pip3 install argparse
     - ./scripts/p2p-test-network.sh
+
+build:test_artifact_creation:
+  stage: build 
+  image: ubuntu:xenial 
+  script:
+    - ./scripts/install_deps_ubuntu1604.sh 
+    - sbt -Dsbt.log.noformat=true clean rholang/bnfc:generate node/debian:packageBin node/rpm:packageBin node/universal:packageZipTarball
 
 build:core:
   stage: build
@@ -55,7 +63,7 @@ build:core:
   script:
     - ./scripts/install_deps_ubuntu1604.sh 
     - ./scripts/build_core.sh
-    - sbt -Dsbt.log.noformat=true clean rholang/bnfc:generate node/debian:packageBin node/rpm:packageBin node/universal:packageZipTarball
+    #- sbt -Dsbt.log.noformat=true clean rholang/bnfc:generate node/debian:packageBin node/rpm:packageBin node/universal:packageZipTarball
 #   when:
 #     on_success:
 #   script:
@@ -71,4 +79,32 @@ build:core:
 #     - build:p2p-test-network
 #   script:
 #   - sbt -Dsbt.log.noformat=true clean rholang/bnfc:generate node/debian:packageBin node/rpm:packageBin node/universal:packageZipTarball 
-
+# deploy:
+#   stage: deploy
+#   when:
+#     on_success:
+#     - build:rosette 
+#     - build:core 
+#     - build:p2p-test-network
+#   artifacts:
+#     paths:
+#     - public
+#   only:
+#   - master
+#   - dev
+#   script:
+#   - sbt -Dsbt.log.noformat=true clean rholang/bnfc:generate node/debian:packageBin node/rpm:packageBin node/universal:packageZipTarball 
+# #   only:
+#     refs:
+#       - master
+#       - schedules
+deploy:
+  stage: deploy
+  artifacts:
+    paths:
+    - public
+  only:
+  - master
+  - dev
+  script:
+  - sbt -Dsbt.log.noformat=true clean rholang/bnfc:generate node/debian:packageBin node/rpm:packageBin node/universal:packageZipTarball 
