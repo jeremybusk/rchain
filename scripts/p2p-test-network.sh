@@ -273,7 +273,7 @@ check_network_convergence() {
 # ======================================================
 
 # MAIN
-if [[ "${CI}" == "true" ]]; then
+if [[ "${CI}" == "fftrue" ]]; then
   repl_load_count=100
   echo "Running in CI"
   sbt -Dsbt.log.noformat=true clean rholang/bnfc:generate node/docker
