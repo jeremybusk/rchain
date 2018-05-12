@@ -7,6 +7,7 @@ set -eo pipefail
 
 apt-get update
 apt-get install sudo -yq
+apt-get install curl -yq
 
 if [ "$TRAVIS" = "true" ]; then 
     PROJECT_ROOT_DIR=${TRAVIS_BUILD_DIR}
