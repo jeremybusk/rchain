@@ -4,7 +4,7 @@
 # "local repo" as params builds from current repo you are in
 # "delete testnet" removes all testnet resources 
 
-if [[ "${TRAVIS}" == "true" ]]; then
+if [[ "${CI}" == "true" ]]; then
   set -eo pipefail # x enables verbosity on CI environment for debugging
 else
   set -eo pipefail
@@ -273,9 +273,9 @@ check_network_convergence() {
 # ======================================================
 
 # MAIN
-if [[ "${TRAVIS}" == "true" ]]; then
+if [[ "${CI}" == "true" ]]; then
   repl_load_count=100
-  echo "Running in TRAVIS CI"
+  echo "Running in CI"
   sbt -Dsbt.log.noformat=true clean rholang/bnfc:generate node/docker
   delete_test_network_resources "${network_name}"
   create_test_network_resources "${network_name}"
