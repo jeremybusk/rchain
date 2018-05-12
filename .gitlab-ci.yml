@@ -38,9 +38,8 @@ build:p2p-test-network:
     - apk add git 
     - apk add sudo
     - apk add bash 
-    - apk add cmake 
     - apk add cabal 
-    - apk add g++ automake autoconf libtool
+    - apk add g++ cmake make automake autoconf libtool
     - apk add flex 
     - apk add rpm 
     - apk add fakeroot 
