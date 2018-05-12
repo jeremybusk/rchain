@@ -1,4 +1,4 @@
-#! /usr/bin/env bash
+#! /usr/bin/env sh 
 
 # Increase stack limit so that Rosette can load all files
 ulimit -s unlimited
