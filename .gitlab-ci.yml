@@ -24,7 +24,7 @@ build:p2p-test-network:
     DOCKER_DRIVER: overlay2
 
   services:
-  - docker:dind
+  - dpocker:dind
 
   before_script:
       #- ./scripts/install_docker.sh 
@@ -41,11 +41,14 @@ build:p2p-test-network:
     - apk add cmake 
     - apk add cabal 
     - apk add automake autoconf libtool
-    - apk add sbt 
     - apk add jflex 
     - apk add rpm 
     - apk add fakeroot 
+    - apk add java 
     - apk add python3 
+    - echo "http://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories
+    - apk update
+    - apk add sbt 
     - sudo pip3 install argparse docker pexpect
     - ./scripts/install_secp.sh
     - ./scripts/install_sodium.sh
