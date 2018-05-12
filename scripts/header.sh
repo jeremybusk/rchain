@@ -1,5 +1,12 @@
 #!/usr/bin/env bash
-set -exo pipefail
+# Header for scripts - use two lines below to use in scripts
+#export PATH=$PATH:$(pwd -P)/scripts
+#source header.sh
+
+set -eo pipefail
+
+apt-get update
+apt-get install sudo -yq
 
 if [ "$TRAVIS" = "true" ]; then 
     PROJECT_ROOT_DIR=${TRAVIS_BUILD_DIR}

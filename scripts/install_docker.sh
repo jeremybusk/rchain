@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-set -eo pipefail
+export PATH=$PATH:$(pwd -P)/scripts
+source header.sh
 
-apt-get install sudo -yq
 sudo curl -sSL https://get.docker.com/ | sh
 sudo docker info
