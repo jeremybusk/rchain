@@ -13,8 +13,8 @@ apk add ghc
 #apk add alpine-sdk
 cabal update
 export LIBRARY_PATH=/usr/lib:$LIBRARY_PATH 
-cabal install --global alex happy
-cabal install --global mtl
+#cabal install --global alex happy
+#cabal install --global mtl
 #- cabal install alex happy mtl --   apk add libc-dev??
 apk add g++ cmake make automake autoconf libtool libc-dev
 # protobuf
