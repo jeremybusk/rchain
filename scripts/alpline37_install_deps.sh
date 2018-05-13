@@ -36,3 +36,5 @@ export JAVA_HOME="/usr/lib/jvm/java-1.8-openjdk"
 apk add python3 
 apk add sbt --update-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing 
 sudo pip3 install argparse docker pexpect
+#apk add docker
+#service docker start
