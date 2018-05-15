@@ -8,6 +8,15 @@ apk update
 apk add git 
 apk add sudo
 apk add bash 
+apk add docker 
+rc-update add docker boot
+service docker start
+apk add python3 
+#apk add py-pip
+#pip install docker-compose
+pip3 install docker-compose
+docker info
+docker ps
 apk add cabal 
 apk add ghc 
 #apk add alpine-sdk
@@ -33,7 +42,6 @@ apk add rpm
 apk add fakeroot 
 apk add openjdk8
 export JAVA_HOME="/usr/lib/jvm/java-1.8-openjdk"
-apk add python3 
 apk add sbt --update-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing 
 sudo pip3 install argparse docker pexpect
 #apk add docker
