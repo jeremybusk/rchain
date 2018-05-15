@@ -67,4 +67,4 @@ build:p2p-test-network:
   #   - dev
   #   script:
   #   - sbt -Dsbt.log.noformat=true clean rholang/bnfc:generate node/debian:packageBin node/rpm:packageBin node/universal:packageZipTarball 
-  #   test4 killing me
+  #   test4 killing me ow
