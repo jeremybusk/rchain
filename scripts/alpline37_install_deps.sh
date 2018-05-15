@@ -1,4 +1,5 @@
 #!/usr/bin/env sh
+set -e # x is for cmd debug
 PROJECT_ROOT_DIR=$(pwd -P)
 export PATH=$PATH:$(pwd -P)/scripts
 #source header.sh
@@ -17,6 +18,8 @@ apk add python3
 pip3 install docker-compose
 docker info
 docker ps
+apk add openjdk8
+export JAVA_HOME="/usr/lib/jvm/java-1.8-openjdk"
 apk add cabal 
 apk add ghc 
 #apk add alpine-sdk
@@ -40,8 +43,6 @@ apk add flex
 apk add flex-dev
 apk add rpm 
 apk add fakeroot 
-apk add openjdk8
-export JAVA_HOME="/usr/lib/jvm/java-1.8-openjdk"
 apk add sbt --update-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing 
 sudo pip3 install argparse docker pexpect
 #apk add docker
