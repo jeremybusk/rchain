@@ -11,8 +11,8 @@ build:rosette:
     - cd rosette
     - nix-build
     - ./run.sh rbl/rosette/tests/simple_add.rbl
- tags:
-  - docker
+  tags:
+    - docker
 
 
 build:p2p-test-network:
