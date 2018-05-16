@@ -18,7 +18,7 @@ build:rosette:
 build:p2p-test-network:
   stage: build
   tags:
-    - alpine
+    - docker 
 #   tags:
 #     - alpine37
 #   job:
@@ -77,3 +77,17 @@ build:p2p-test-network:
   #   script:
   #   - sbt -Dsbt.log.noformat=true clean rholang/bnfc:generate node/debian:packageBin node/rpm:packageBin node/universal:packageZipTarball 
   #   test4 killing me ow
+ 
+build:ubuntu1604-p2p-test-network:
+  stage: build
+  tags:
+    - docker
+  image: ubuntu:1604
+
+  script:
+    - ./scripts/ubuntu1604_install_deps.sh
+    - ./scripts/install_secp.sh
+    - ./scripts/install_sodium.sh
+    - ./scripts/install_bnfc.sh
+      # - sbt -Dsbt.log.noformat=true clean rholang/bnfc:generate node/docker
+    - ./scripts/p2p-test-network.sh local && ./scripts/p2p-test-network.sh run-tests 50

@@ -1,5 +1,5 @@
 #!/usr/bin/env sh
-set -e # x is for cmd debug
+set -ex # x is for cmd debug
 PROJECT_ROOT_DIR=$(pwd -P)
 export PATH=$PATH:$(pwd -P)/scripts
 #source header.sh
