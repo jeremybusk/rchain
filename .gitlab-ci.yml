@@ -82,7 +82,7 @@ build:ubuntu1604-p2p-test-network:
   stage: build
   tags:
     - docker
-  image: ubuntu:1604
+  image: ubuntu:16.04
 
   script:
     - ./scripts/ubuntu1604_install_deps.sh
