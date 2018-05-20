@@ -10,9 +10,11 @@ apk add openrc
 apk add git 
 apk add sudo
 apk add bash 
-apk add docker 
-rc-update add docker boot
-service docker start
+if [ ! $(docker info) ]; then
+  apk add docker 
+  rc-update add docker boot
+  service docker start
+fi
 apk add python3 
 #apk add py-pip
 #pip install docker-compose

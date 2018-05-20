@@ -40,25 +40,25 @@ apt-get install cmake curl git -yqq
 #  apt-get install default-jdk -yqq # alternate jdk install 
 apt-get install openjdk-8-jdk -yqq
 
-## Build Needed Crypto
-# Build secp 
-apt-get install autoconf libtool -yqq
-cd ${PROJECT_ROOT_DIR}
-./scripts/install_secp.sh
-
-# Build libsodium
-cd ${PROJECT_ROOT_DIR}
-./scripts/install_sodium.sh
-
-## Install Haskell Platform
+## Install Haskell Platform for bnfc
 # ref: https://www.haskell.org/platform/#linux-ubuntu
 # ref: https://www.haskell.org/platform/ # all platforms
-cd ${PROJECT_ROOT_DIR}
 apt-get install haskell-platform -yqq
 
-## Install BNFC Converter 
-# ref: http://bnfc.digitalgrammars.com/
-./scripts/install_bnfc.sh
+# ## Build Needed Crypto
+# # Build secp 
+# apt-get install autoconf libtool -yqq
+# cd ${PROJECT_ROOT_DIR}
+# ./scripts/install_secp.sh
+# 
+# # Build libsodium
+# cd ${PROJECT_ROOT_DIR}
+# ./scripts/install_sodium.sh
+# 
+# cd ${PROJECT_ROOT_DIR}
+# ## Install BNFC Converter 
+# # ref: http://bnfc.digitalgrammars.com/
+# ./scripts/install_bnfc.sh
 
 ## Install SBT 
 cd ${PROJECT_ROOT_DIR}
