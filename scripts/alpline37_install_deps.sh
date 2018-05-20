@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash 
 set -ex # x is for cmd debug
 PROJECT_ROOT_DIR=$(pwd -P)
 export PATH=$PATH:$(pwd -P)/scripts
@@ -11,18 +11,22 @@ apk add sudo
 apk add bash 
 
 # Docker
-set +e
-docker info
-set -e
-if [ $? -ne 0 ]; then
+# set +e
+# docker info
+# set -e
+# if [ $? -ne 0 ]; then
+#   apk add openrc
+#   apk add docker 
+#   rc-update add docker boot
+#   service docker start
+# fi
+if [[ ! $(docker info) ]]; then
   apk add openrc
   apk add docker 
   rc-update add docker boot
   service docker start
 fi
 
-if [ ! $(docker info) ]; then
-fi
 apk add python3 
 #apk add py-pip
 #pip install docker-compose

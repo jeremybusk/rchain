@@ -40,8 +40,12 @@ apt-get install cmake curl git -yqq
 #  apt-get install default-jdk -yqq # alternate jdk install 
 apt-get install openjdk-8-jdk -yqq
 
+apt-get install software-properties-common python-software-properties -yqq
 add-apt-repository ppa:jonathonf/python-3.6
-apt-get install python3.6
+apt-get update
+apt-get install python3.6 -yqq
+curl https://bootstrap.pypa.io/get-pip.py | python3.6
+pip3.6 install argparse docker pexpect
 
 ## Install Haskell Platform for bnfc
 # ref: https://www.haskell.org/platform/#linux-ubuntu
