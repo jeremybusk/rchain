@@ -5,7 +5,7 @@ set -exo pipefail
 # ref: http://bnfc.digitalgrammars.com/
 git clone https://github.com/BNFC/bnfc.git
 cd bnfc/source
-if [ $(cat /etc/*release | grep ID=alpine) ]; then 
+if [[ $(cat /etc/*release | grep ID=alpine) ]]; then 
   cabal install --global alex happy
   sudo cabal install --global
   cabal install --global mtl
