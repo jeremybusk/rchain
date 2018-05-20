@@ -6,6 +6,7 @@ export PATH=$PATH:$(pwd -P)/scripts
 
 tmp_dir=$(mktemp -d /tmp/rchain-tmp.XXXXXXXX)
 apk update 
+apk add openrc
 apk add git 
 apk add sudo
 apk add bash 
