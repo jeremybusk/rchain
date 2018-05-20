@@ -1,5 +1,5 @@
 #!/bin/sh
-set -ex
+set -exo pipefail
 
 ## Install BNFC Converter
 # ref: http://bnfc.digitalgrammars.com/
