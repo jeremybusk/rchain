@@ -1,22 +1,22 @@
-image: java:8
-
-stages:
-  - test
-
-variables:
-  SBT_VERSION: "1.1.5"
-  SBT_OPTS: "-Dsbt.global.base=sbt-cache/.sbtboot -Dsbt.boot.directory=sbt-cache/.boot -Dsbt.ivy.home=sbt-cache/.ivy"
-  SBT_CACHE_DIR: "sbt-cache/.ivy/cache"
-
-cache:
-  key: "$CI_BUILD_REF_NAME" # contains either the branch or the tag, so it's caching per branch
-  untracked: true
-  paths:
-    - "apt-cache/"
-    - "sbt-cache/.ivy/cache"
-    - "sbt-cache/.boot"
-    - "sbt-cache/.sbtboot"
-    - "sbt-cache/target"
+# image: java:8
+# 
+# stages:
+#   - test
+# 
+# variables:
+#   SBT_VERSION: "1.1.5"
+#   SBT_OPTS: "-Dsbt.global.base=sbt-cache/.sbtboot -Dsbt.boot.directory=sbt-cache/.boot -Dsbt.ivy.home=sbt-cache/.ivy"
+#   SBT_CACHE_DIR: "sbt-cache/.ivy/cache"
+# 
+# cache:
+#   key: "$CI_BUILD_REF_NAME" # contains either the branch or the tag, so it's caching per branch
+#   untracked: true
+#   paths:
+#     - "apt-cache/"
+#     - "sbt-cache/.ivy/cache"
+#     - "sbt-cache/.boot"
+#     - "sbt-cache/.sbtboot"
+#     - "sbt-cache/target"
 
 # before_script:
 #   - export APT_CACHE_DIR=`pwd`/apt-cache
@@ -139,5 +139,5 @@ build:ubuntu1604-p2p-test-network:
     - sudo pip3.6 install argparse docker pexpect
       # - sbt -Dsbt.log.noformat=true clean rholang/bnfc:generate node/docker
       #- ./scripts/p2p-test-network.sh local && ./scripts/p2p-test-network.sh run-tests 50
-    - sbt -Dsbt.log.noformat=true clean rholang/bnfc:generate node/docker
+    - sudo sbt -Dsbt.log.noformat=true clean rholang/bnfc:generate node/docker
     - sudo ./scripts/p2p-test-network.py -b
