@@ -125,7 +125,8 @@ build:p2p-test-network:
  
 build:ubuntu1604-p2p-test-network:
   stage: build
-  tags: preloaded-ubuntu1604
+  tags:
+    - preloaded-ubuntu1604
   # tags:
   #   - docker
   # image: ubuntu:16.04
