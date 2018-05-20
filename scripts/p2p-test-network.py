@@ -1,0 +1,361 @@
+#!/usr/bin/env python3.6
+from pexpect import replwrap
+import subprocess
+import argparse
+import docker
+
+import os
+import tempfile
+
+#from prometheus_client.parser import text_string_to_metric_families
+import requests
+import re
+import time
+
+#default_domain = 'rchain.coop'
+
+parser = argparse.ArgumentParser()
+# parser.add_argument("-g", "--grpc-host", dest='grpc_host', default="peer0.rchain.coop", help="set grpc host")
+parser.add_argument("-rla", "--repl-load-amount", dest='repl_load_amount', type=int, default=50, help="set repl load repetition amount for loops")
+parser.add_argument("-p", "--prompt", dest='prompt', type=str, default="rholang $ ", help="set REPL prompt")
+# parser.add_argument("-c", "--cpus", dest='cpus', type=int, default=1, help=".5 set docker cpus for repl client node")
+parser.add_argument("-cc", "--cpuset-cpus", dest='cpuset_cpus', type=str, default="0", help="set docker cpuset-cpus for nodes. Allows limiting execution in specific CPUs")
+parser.add_argument("-m", "--memory", dest='memory', type=str, default="1024m", help="1024m set docker memory for repl client node")
+parser.add_argument("-n", "--network", dest='network', type=str, default="rchain.coop", help="set docker network name")
+parser.add_argument("-a", "--amount", dest='amount', type=int, default="2", help="set amount of total peers for network")
+# parser.add_argument("-t", "--type", dest='type', type=str, default="docker", help="set vm/container type - docker/virtualbox")
+parser.add_argument("-i", "--image", dest='image', type=str, default="coop.rchain/rnode:latest", help="source repo for docker image")
+parser.add_argument("-rd", "--rnode-directory", dest='rnode_directory', type=str, default="/var/lib/rnode", help="container rnode mount point directory")
+parser.add_argument("-bc", "--bootstrap-command", dest='bootstrap_command', type=str, default="--port 30304 --standalone --name 0f365f1016a54747b384b386b8e85352", help="bootstrap container run command")
+parser.add_argument("-pc", "--peer-command", dest='peer_command', type=str, default="--bootstrap rnode://0f365f1016a54747b384b386b8e85352@bootstrap.rchain.coop:30304", help="peer container run command")
+parser.add_argument("-t", "--tests", dest='tests', type=str, nargs='+', default=['network_sockets', 'count', 'errors', 'repl'], help="run these tests")
+parser.add_argument("-ot", "--only-tests", action='store_true' , help="only run tests")
+parser.add_argument("-l", "--logs", action='store_true' , help="show all node logs")
+parser.add_argument("-rm", "--remove", action='store_true' , help="forcibly remove all container resources associated to network name")
+parser.add_argument("-b", "--boot", action='store_true' , help="boot network by creating resources and starting services by network name")
+parser.add_argument("-s", "--skip-convergence_test", dest="skip_convergence_test", action='store_true' , help="skip network convergence test")
+
+
+# Define globals
+args = parser.parse_args()
+client = docker.from_env()
+
+
+def run_tests():
+    notices ={} 
+    notices['fail'] = []
+    notices['pass'] = []
+    # all_pass = True 
+    if not client.containers.list(all=True, filters={"name":f".{args.network}"}): # return if empty
+        return 
+
+    for test in args.tests:
+        if test == "network_sockets":
+            for container in client.containers.list(all=True, filters={"name":f"peer\d.{args.network}"}):
+                if test_network_sockets(container):
+                    notices['pass'].append(f"{container.name}: Peers count correct in node logs.")
+                else:
+                    #all_pass = False
+                    notices['fail'].append(f"{container.name}: Peers count incorrect in node logs.")
+        if test == "errors":
+            for container in client.containers.list(all=True, filters={"name":f'peer\d.{args.network}'}):
+                print(container.name)
+                if test_node_logs_for_errors(container):
+                    notices['pass'].append(f"{container.name}: No errors defined by \"ERROR\" in logs.")
+                else:
+                    notices['fail'].append(f"{container.name}: Errors found in node logs.")
+        if test == "count":
+            for container in client.containers.list(all=True, filters={"name":f"peer\d.{args.network}"}):
+                if test_node_logs_for_correct_peers_count(container):
+                    notices['pass'].append(f"{container.name}: Peers count correct in node logs.")
+                else:
+                    notices['fail'].append(f"{container.name}: Peers count incorrect in node logs.")
+        if test == "repl":
+            # for container in client.containers.list(all=True, filters={"name":"peer\d\.rchain.coop"}): # this will enable all peers to be checked
+            # for container in client.containers.list(all=True, filters={"name":f"{args.grpc_host}"}):
+            for container in client.containers.list(all=True, filters={"name":f"peer0.{args.network}"}):
+                if test_repl_load(container):
+                    notices['pass'].append(f"{container.name}: REPL loader success!")
+                else:
+                    notices['fail'].append(f"{container.name}: REPL loader failure!")
+
+    print("===========================================================")
+    print("=================TEST SUMMARY RESULTS======================")
+    if notices['fail']:
+        for notice in notices['fail']:
+            print(f"FAIL: {notice}")
+        raise Exception('FAIL: Part or all of tests failed in one or more peer nodes.')
+    else:
+        for notice in notices['pass']:
+            print(f"PASS: {notice}")
+        print("PASS ALL: All tests successfully passed")
+    print("===========================================================")
+    print("===========================================================")
+
+
+def show_logs():
+    for container in client.containers.list(all=True, filters={"name":f".{args.network}"}):
+        print(f"Showing logs for {container.name}")
+        r = container.logs().decode('utf-8')
+        print(r)
+
+
+def boot_p2p_network():
+    try:
+        client.networks.create(args.network, driver="bridge")
+        create_bootstrap_node()
+        print("Giving 10 second boot lead for bootstrap node.")
+        time.sleep(10)
+        create_peer_nodes()
+    except Exception as e:
+        print(e)
+
+
+def main():
+    """Main program"""
+    if args.remove:
+        remove_resources_by_network(args.network)
+    if args.boot:
+        remove_resources_by_network(args.network)
+        boot_p2p_network()
+    if args.tests:
+        if not args.skip_convergence_test:
+            for container in client.containers.list(all=True, filters={"name":f'bootstrap.{args.network}'}):
+                check_network_convergence(container)
+        run_tests()
+    if args.logs:
+        show_logs()
+
+
+def var_to_docker_file(var, container_name, file_path):
+    """Convert variabled to container file."""
+    fd, path = tempfile.mkstemp()
+    try:
+        with os.fdopen(fd, 'w') as tmp:
+            tmp.write(var)
+    finally:
+        subprocess.call(["docker", "cp", path, f"{container_name}:{file_path}"])
+        os.remove(path)
+
+
+
+def check_network_convergence(container):
+    peers_metric = ''
+    peers_metric_expected = args.amount
+    timeout = 200
+    count = 0
+
+    #while peers_metric != peers_metric_expected:
+    while count < 200:
+    #while True:
+        cmd = f'curl -s {container.name}:9095'
+        r = container.exec_run(cmd=cmd).output.decode('utf-8')
+        print(r)
+        print(f"checking {count} of {timeout} seconds")
+        #     peers_metric = int(float(re.search(r'^peers (.*)$', r, re.MULTILINE).group().rsplit(' ', 1)[1]))
+        for line in r.splitlines():
+            if line == f"peers {args.amount}.0":
+                print("Network converged.")
+                return 
+        # if count >= timeout:
+        #     print("Timeout of {timeout} seconds reached ... exiting network convergence pre tests probe.")
+        #     return 
+        time.sleep(10)
+        count += 10
+    print("Timeout of {timeout} seconds reached ... exiting network convergence pre tests probe.")
+    return False
+
+
+def check_network_convergence_alternate(peers_metric_expected):
+    """Alternate check for network convergence before running tests."""
+    print("Checking for network convergence. This could take a while. Max is 200 seconds.")
+    for container in client.containers.list(all=True, filters={"name":f"scan.{args.network}"}):
+        container.remove(force=True, v=True)
+
+    scan_node = {}
+    scan_node['name'] = f"scan.{args.network}"
+    scan_node['volume'] = client.volumes.create()
+    container = client.containers.run('alpine:latest', \
+        name=scan_node['name'], \
+        detach=True, \
+        network=args.network, \
+        volumes={scan_node['volume'].name: {'bind': '/app', 'mode': 'rw'}}, \
+        hostname=scan_node['name'], tty=True)
+    r = container.exec_run(cmd='apk update')
+    r = container.exec_run(cmd='apk add python3')
+    r = container.exec_run(cmd='pip3 install requests')
+
+    # Trying this out. A little funky. This will go into library someday but for now it is here. 
+    var =("import tempfile\n"
+          "import os\n"
+          "import re\n"
+          "import requests\n"
+          "import time\n"
+          "import subprocess\n"
+          "peers_metric = ''\n"
+          f"peers_metric_expected = {peers_metric_expected}\n"
+          "timeout = 200\n"
+          "count = 0\n"
+
+          "while peers_metric != peers_metric_expected:\n"
+          '    print(f"checking {count} of {timeout} seconds")\n'
+          f"    metrics = requests.get('http://bootstrap.{args.network}:9095').content.decode('utf-8')\n"
+              # peers_metric = float(re.findall(r'^peers (.*)$', metrics, re.MULTILINE)[0]) # alt get peers
+          "    try:\n"
+          "        peers_metric = int(float(re.search(r'^peers (.*)$', metrics, re.MULTILINE).group().rsplit(' ', 1)[1]))\n"
+          "    except Exception as e:\n"
+          "        pass\n"
+          "    if count >= timeout:\n"
+          '        print("timeout of {timeout} seconds reached ... exiting pre tests probe")\n'
+          "        break\n"
+          "    time.sleep(10)\n"
+          "    count += 10\n")
+    var_to_docker_file(var, f'scan.{args.network}', '/app/scan.py')
+    r = container.exec_run(cmd='python3 /app/scan.py')
+    print(r.output.decode("utf-8"))
+    print("Network has converged.")
+    return True
+
+
+def remove_resources_by_network(args_network):
+    """Remove resources by network name."""
+    for container in client.containers.list(all=True):
+        if args_network in container.name:
+            print(f"removing {container.name}")
+            container.remove(force=True, v=True)
+
+    for network in client.networks.list():
+        if args_network == network.name:
+            print(f"removing {network.name}")
+            network.remove()
+    # client.volumes.prune() # removes unused volumes
+
+
+def create_bootstrap_node():
+    """Create bootstrap node."""
+    bootstrap_node = {}
+    bootstrap_node['name'] = f"bootstrap.{args.network}"
+    bootstrap_node['volume'] = client.volumes.create()
+    print(f"creating {bootstrap_node['name']}")
+    container = client.containers.run(args.image, \
+        name=bootstrap_node['name'], \
+        detach=True, \
+        cpuset_cpus=args.cpuset_cpus, \
+        mem_limit=args.memory, \
+        network=args.network, \
+        volumes={bootstrap_node['volume'].name: {'bind': args.rnode_directory, 'mode': 'rw'}}, \
+        command=args.bootstrap_command, \
+        hostname=bootstrap_node['name'])
+
+    # Add additional packages.
+    container.exec_run(cmd='apk update')
+    container.exec_run(cmd='apk add curl')
+    container.exec_run(cmd='apk add nmap')
+    container.exec_run(cmd='apk add python3')
+    container.exec_run(cmd='pip3 install requests')
+
+
+def create_peer_nodes():
+    """Create peer nodes."""
+    for i in range(args.amount):
+        peer_node = {}
+        peer_node[i] = {}
+        peer_node[i]['name'] = f"peer{i}.{args.network}"
+        peer_node[i]['volume'] = client.volumes.create()
+        print(f"creating {peer_node[i]['name']}")
+        container = client.containers.run(args.image, \
+            name=peer_node[i]['name'], \
+            detach=True, \
+            cpuset_cpus=args.cpuset_cpus, \
+            mem_limit=args.memory, \
+            network=args.network, \
+            volumes=[f"{peer_node[i]['volume'].name}:{args.rnode_directory}"], \
+            command=args.peer_command, \
+            hostname=peer_node[i]['name'])
+
+        # Add additional packages.
+        container.exec_run(cmd='apk update')
+        container.exec_run(cmd='apk add curl')
+        container.exec_run(cmd='apk add nmap')
+        container.exec_run(cmd='apk add python3')
+        container.exec_run(cmd='pip3 install requests')
+      
+
+def test_network_sockets(container):
+    print(f"Test metrics api socket for {container.name}")
+    try:
+        cmd = f"nmap -sS -n -p T:9095 -oG - {container.name}"
+        r = container.exec_run(cmd=cmd).output.decode("utf-8")
+        if "9095/open/tcp" in r:
+            print("PASS: tcp/9095 Metrics API socket is available.")
+        else:
+            raise Exception("FAIL: Metrics API socket is unavailable.")
+        return True 
+    except Exception as e:
+        print(e)
+        return False
+
+def test_repl_load(container):
+    """Load REPL with commands."""
+    test_pass = False 
+    for repl_container in client.containers.list(all=True, filters={"name":f"repl\d.{args.network}"}):
+        print(f"removing {repl_container.name}")
+        repl_container.remove(force=True, v=True)
+    i = 0
+    try:
+        repl_node = {}
+        repl_node[i] = {}
+        repl_node[i]['name'] = f"repl{i}.{args.network}"
+        repl_node[i]['volume'] = client.volumes.create()
+
+        cmd = (f"sudo docker run --rm -it -v {repl_node[i]['volume'].name}:{args.rnode_directory} "
+               f"--cpuset-cpus={args.cpuset_cpus} --memory={args.memory} --name {repl_node[i]['name']} "
+               f"--network {args.network} {args.image} "
+               f"--grpc-host {container.name} -r")
+        print(f"docker repl cmd: {cmd}")
+
+        repl_cmds = ['5', '@"stdout"!("foo")']
+        conn = replwrap.REPLWrapper(cmd, args.prompt, None)
+        for i in range(args.repl_load_amount):
+            for repl_cmd in repl_cmds:
+                result = conn.run_command(repl_cmd)
+                print(f"repetition: {i} output: {result}")
+            i += 1 
+        print("PASS: Repl load runner ran with no errors")
+        return True 
+    except Exception as e:
+        print(e)
+        print("FAIL: Repl load runner failed")
+        return False
+
+
+def test_node_logs_for_errors(container):
+    test_pass = False 
+    print(f"Testing {container.name} node logs for errors.")
+    r = container.logs().decode('utf-8')
+    if not "ERROR" in r:
+        test_pass = True
+        print("PASS: No errors found in logs")
+        return True 
+    else:
+        print("FAIL: Errors matching ERROR found in logs")
+        for line in r.splitlines():
+            if "ERROR" in line:
+                print(line)
+    return test_pass
+
+
+def test_node_logs_for_correct_peers_count(container):
+    test_pass = False
+    print(f"Testing {container.name} node logs for correct peers count.")
+    r = container.logs()
+    for line in r.splitlines():
+        line = line.decode('utf-8')
+        if f"Peers: {args.amount}." in line:
+            print(line)
+            test_pass = True
+    return test_pass
+
+
+if __name__ == "__main__":
+    main()
