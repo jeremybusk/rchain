@@ -2,6 +2,13 @@
 
 set -e
 
+os=$(cat /etc/*release | grep ^ID | awk -F"=" '{print $2}')
+if [[ "${os} " == "alpine" ]]
+    echo "alpine"
+    # apk add 
+    exit
+fi
+
 cd crypto
 git clone https://github.com/bitcoin-core/secp256k1
 cd secp256k1
