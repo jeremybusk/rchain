@@ -11,7 +11,9 @@ apk add sudo
 apk add bash 
 
 # Docker
+set +e
 docker info
+set -e
 if [ $? -ne 0 ]; then
   apk add openrc
   apk add docker 
