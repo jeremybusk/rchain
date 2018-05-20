@@ -21,19 +21,19 @@ apk add bash
 #   service docker start
 # fi
 
+sleep 10
+docker info
+#docker ps
 # if [[ ! $(docker info) ]]; then
 #   apk add openrc
 #   apk add docker 
 #   rc-update add docker boot
 #   service docker start
 # fi
-
 apk add python3 
 #apk add py-pip
 #pip install docker-compose
 pip3 install docker-compose
-docker info
-docker ps
 apk add openjdk8
 export JAVA_HOME="/usr/lib/jvm/java-1.8-openjdk"
 apk add cabal 
