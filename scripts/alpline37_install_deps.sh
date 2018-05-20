@@ -20,12 +20,13 @@ apk add bash
 #   rc-update add docker boot
 #   service docker start
 # fi
-if [[ ! $(docker info) ]]; then
-  apk add openrc
-  apk add docker 
-  rc-update add docker boot
-  service docker start
-fi
+
+# if [[ ! $(docker info) ]]; then
+#   apk add openrc
+#   apk add docker 
+#   rc-update add docker boot
+#   service docker start
+# fi
 
 apk add python3 
 #apk add py-pip
