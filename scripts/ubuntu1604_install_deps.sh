@@ -40,6 +40,9 @@ apt-get install cmake curl git -yqq
 #  apt-get install default-jdk -yqq # alternate jdk install 
 apt-get install openjdk-8-jdk -yqq
 
+add-apt-repository ppa:jonathonf/python-3.6
+apt-get install python3.6
+
 ## Install Haskell Platform for bnfc
 # ref: https://www.haskell.org/platform/#linux-ubuntu
 # ref: https://www.haskell.org/platform/ # all platforms
