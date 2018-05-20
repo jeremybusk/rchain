@@ -80,6 +80,7 @@ build:p2p-test-network:
 
   script:
     - export JAVA_HOME="/usr/lib/jvm/java-1.8-openjdk"
+    - apk update
     - apk add bash
     - ./scripts/alpline37_install_deps.sh
     - ./scripts/install_secp.sh
@@ -124,12 +125,13 @@ build:p2p-test-network:
  
 build:ubuntu1604-p2p-test-network:
   stage: build
-  tags:
-    - docker
-  image: ubuntu:16.04
+  tags: preloaded-ubuntu1604
+  # tags:
+  #   - docker
+  # image: ubuntu:16.04
 
   script:
-    - ./scripts/ubuntu1604_install_deps.sh
+      # - ./scripts/ubuntu1604_install_deps.sh
     - ./scripts/install_secp.sh
     - ./scripts/install_sodium.sh
     - ./scripts/install_bnfc.sh
