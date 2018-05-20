@@ -21,6 +21,7 @@ apk add bash
 #   service docker start
 # fi
 
+service docker start
 sleep 10
 docker info
 #docker ps
