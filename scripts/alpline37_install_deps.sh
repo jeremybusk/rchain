@@ -6,14 +6,20 @@ export PATH=$PATH:$(pwd -P)/scripts
 
 tmp_dir=$(mktemp -d /tmp/rchain-tmp.XXXXXXXX)
 apk update 
-apk add openrc
 apk add git 
 apk add sudo
 apk add bash 
-if [ ! $(docker info) ]; then
+
+# Docker
+docker info
+if [ $? -ne 0 ]; then
+  apk add openrc
   apk add docker 
   rc-update add docker boot
   service docker start
+fi
+
+if [ ! $(docker info) ]; then
 fi
 apk add python3 
 #apk add py-pip

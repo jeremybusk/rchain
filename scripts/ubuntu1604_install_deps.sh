@@ -47,7 +47,7 @@ apt-get install haskell-platform -yqq
 
 # ## Build Needed Crypto
 # # Build secp 
-# apt-get install autoconf libtool -yqq
+apt-get install autoconf libtool -yqq
 # cd ${PROJECT_ROOT_DIR}
 # ./scripts/install_secp.sh
 # 
