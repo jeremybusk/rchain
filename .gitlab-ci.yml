@@ -139,4 +139,5 @@ build:ubuntu1604-p2p-test-network:
     - sudo pip3.6 install argparse docker pexpect
       # - sbt -Dsbt.log.noformat=true clean rholang/bnfc:generate node/docker
       #- ./scripts/p2p-test-network.sh local && ./scripts/p2p-test-network.sh run-tests 50
+    - sbt -Dsbt.log.noformat=true clean rholang/bnfc:generate node/docker
     - sudo ./scripts/p2p-test-network.py -b
