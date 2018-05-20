@@ -1,13 +1,6 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
-set -e
-
-os=$(cat /etc/*release | grep ^ID | awk -F"=" '{print $2}')
-if [[ "${os} " == "alpine" ]]
-    echo "alpine"
-    # apk add 
-    exit
-fi
+set -exo pipefail
 
 cd crypto
 git clone https://github.com/bitcoin-core/secp256k1
