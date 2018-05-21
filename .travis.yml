@@ -103,6 +103,7 @@ matrix:
 
 before_script:
   - pyenv global system 3.6 # Workaround for travis-ci/issues/8363
+  - sudo pip3.6 install argparse docker pexpect
 script:
   - ./scripts/build-subprojects.sh
 
