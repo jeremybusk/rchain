@@ -61,17 +61,18 @@ build:p2p-test-network:
   stage: build
   tags:
     - docker 
-#   tags:
-#     - alpine37
+  tags:
+    - alpine37
 #   job:
 #     only:
 #      - tags
-  image: docker:stable
+#  image: docker:stable
+  image: alpine:latest
   variables:
     DOCKER_DRIVER: overlay2
 
-  services:
-  - docker:dind
+#  services:
+#  - docker:dind
 
   #  before_script:
   #    - apk update 
@@ -82,7 +83,7 @@ build:p2p-test-network:
     - export JAVA_HOME="/usr/lib/jvm/java-1.8-openjdk"
     - apk update
     - apk add bash
-    - ./scripts/alpline37_install_deps.sh
+    - ./scripts/alpine37_install_deps.sh
     - ./scripts/install_secp.sh
     - ./scripts/install_sodium.sh
     - ./scripts/install_bnfc.sh
