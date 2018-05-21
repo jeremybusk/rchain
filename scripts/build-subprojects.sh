@@ -36,7 +36,7 @@ case "$SUBPROJECT" in "rosette")
 
     #sudo apt-get -yq install python3-minimal python3-pip
     sudo pip install pexpect argparse docker
-    python ./scripts/p2p-test-network.py -b -D
+    python3.6.3 ./scripts/p2p-test-network.py -b -D
     ;;
 
 "cloud-p2p-test-network")
