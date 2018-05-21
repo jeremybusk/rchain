@@ -79,6 +79,8 @@ matrix:
           - rpm
           - fakeroot
   - language: scala
+    python:
+      - 3.6
     env: SUBPROJECT=cloud-p2p-test-network
     scala: 2.12.4
     sbt_args: -no-colors
@@ -98,6 +100,10 @@ matrix:
           - fakeroot
   - language: nix 
     env: SUBPROJECT=rholang_more_tests
+
+before_script:
+  - pyenv global system 3.6 # Workaround for travis-ci/issues/8363
+  - python3.6 -m pip install argparse docker pexpect
 
 script:
   - ./scripts/build-subprojects.sh
