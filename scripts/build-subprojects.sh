@@ -34,9 +34,9 @@ case "$SUBPROJECT" in "rosette")
 
 "p2p-test-network")
 
-    sudo apt-get -yq install python3-minimal python3-pip
-    sudo pip3 install pexpect argparse docker
-    ./scripts/p2p-test-network.sh
+    #sudo apt-get -yq install python3-minimal python3-pip
+    sudo pip install pexpect argparse docker
+    ./scripts/p2p-test-network.py
     ;;
 
 "cloud-p2p-test-network")
