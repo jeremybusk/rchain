@@ -80,7 +80,7 @@ matrix:
           - fakeroot
   - language: scala
     python:
-      - 3.6
+      - "3.6"
     env: SUBPROJECT=cloud-p2p-test-network
     scala: 2.12.4
     sbt_args: -no-colors
