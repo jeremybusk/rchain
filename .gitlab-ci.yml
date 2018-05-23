@@ -1,60 +1,18 @@
-# image: java:8
-# 
-# stages:
-#   - test
-# 
-# variables:
-#   SBT_VERSION: "1.1.5"
-#   SBT_OPTS: "-Dsbt.global.base=sbt-cache/.sbtboot -Dsbt.boot.directory=sbt-cache/.boot -Dsbt.ivy.home=sbt-cache/.ivy"
-#   SBT_CACHE_DIR: "sbt-cache/.ivy/cache"
-# 
-# cache:
-#   key: "$CI_BUILD_REF_NAME" # contains either the branch or the tag, so it's caching per branch
-#   untracked: true
-#   paths:
-#     - "apt-cache/"
-#     - "sbt-cache/.ivy/cache"
-#     - "sbt-cache/.boot"
-#     - "sbt-cache/.sbtboot"
-#     - "sbt-cache/target"
-
-# before_script:
-#   - export APT_CACHE_DIR=`pwd`/apt-cache
-#   - mkdir -pv $APT_CACHE_DIR
-#   - ls $APT_CACHE_DIR || echo "no apt-cache dir found"
-#   - apt-get -o dir::cache::archives=$APT_CACHE_DIR update -y
-#   - apt-get -o dir::cache::archives=$APT_CACHE_DIR install apt-transport-https -y
-#   # Install SBT
-#   - mkdir -pv $SBT_CACHE_DIR
-#   - ls $SBT_CACHE_DIR || echo "no ivy2 cache fir found"
-#   - echo "deb http://dl.bintray.com/sbt/debian /" | tee -a /etc/apt/sources.list.d/sbt.list
-#   - apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 642AC823
-#   - apt-get -o dir::cache::archives=$APT_CACHE_DIR update -y
-#   - apt-get -o dir::cache::archives=$APT_CACHE_DIR install sbt -y
-#   - sbt -v sbtVersion
-# 
-# test:
-#   stage: test
-#   script:
-#      - sbt -v sbtVersion
-
-
-
 stages:
   - build
   - test
   - deploy
 
 
-build:rosette:
-  stage: build
-  image: nixos/nix
-  script:
-    - cd rosette
-    - nix-build
-    - ./run.sh rbl/rosette/tests/simple_add.rbl
-  tags:
-    - docker
+# build:rosette:
+#   stage: build
+#   image: nixos/nix
+#   script:
+#     - cd rosette
+#     - nix-build
+#     - ./run.sh rbl/rosette/tests/simple_add.rbl
+#   tags:
+#     - docker
 
 
 build:p2p-test-network:
@@ -63,16 +21,13 @@ build:p2p-test-network:
     - docker 
   tags:
     - alpine37
-#   job:
-#     only:
-#      - tags
-#  image: docker:stable
+  # image: docker:stable
   image: alpine:latest
   variables:
     DOCKER_DRIVER: overlay2
 
-#  services:
-#  - docker:dind
+  services:
+  - docker:dind
 
   #  before_script:
   #    - apk update 
@@ -91,54 +46,22 @@ build:p2p-test-network:
       #- ./scripts/p2p-test-network.sh local && ./scripts/p2p-test-network.sh run-tests 50
     - ./scripts/p2p-test-network.py -b
 
-      # - apk add jflex 
-      # - echo "http://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories
-      #apk add cherokee --update-cache --repository http://dl-3.alpinelinux.org/alpine/edge/testing/ --allow-untrusted
-
-      #- apk add g++ 
-      #apk add --update alpine-sdk
-      #- apk add autoconf libtool #?no need for libtool secp
-  # build:test_artifact_creation:
-  #   stage: build 
-  #   image: ubuntu:xenial 
-  #   script:
-  #     - ./scripts/install_deps_ubuntu1604.sh 
-  #     - sbt -Dsbt.log.noformat=true clean rholang/bnfc:generate node/debian:packageBin node/rpm:packageBin node/universal:packageZipTarball
-  # 
-  # build:core:
-  #   stage: build
-  #   image: ubuntu:xenial 
-  #   script:
-  #     - ./scripts/install_deps_ubuntu1604.sh 
-  #     - ./scripts/build_core.sh
-  # 
-  # deploy:
-  #   stage: deploy
-  #   artifacts:
-  #     paths:
-  #     - public
-  #   only:
-  #   - master
-  #   - dev
-  #   script:
-  #   - sbt -Dsbt.log.noformat=true clean rholang/bnfc:generate node/debian:packageBin node/rpm:packageBin node/universal:packageZipTarball 
-  #   test4 killing me ow
  
-build:ubuntu1604-p2p-test-network:
-  stage: build
-  tags:
-    - preloaded-ubuntu1604
-  # tags:
-  #   - docker
-  # image: ubuntu:16.04
-
-  script:
-      # - ./scripts/ubuntu1604_install_deps.sh
-    - ./scripts/install_secp.sh
-    - ./scripts/install_sodium.sh
-    - ./scripts/install_bnfc.sh
-    - sudo pip3.6 install argparse docker pexpect
-      # - sbt -Dsbt.log.noformat=true clean rholang/bnfc:generate node/docker
-      #- ./scripts/p2p-test-network.sh local && ./scripts/p2p-test-network.sh run-tests 50
-    - sudo sbt -Dsbt.log.noformat=true clean rholang/bnfc:generate node/docker
-    - sudo ./scripts/p2p-test-network.py -b
+  # build:ubuntu1604-p2p-test-network:
+  #   stage: build
+  #   tags:
+  #     - preloaded-ubuntu1604
+  #   # tags:
+  #   #   - docker
+  #   # image: ubuntu:16.04
+  # 
+  #   script:
+  #       # - ./scripts/ubuntu1604_install_deps.sh
+  #     - ./scripts/install_secp.sh
+  #     - ./scripts/install_sodium.sh
+  #     - ./scripts/install_bnfc.sh
+  #     - sudo pip3.6 install argparse docker pexpect
+  #       # - sbt -Dsbt.log.noformat=true clean rholang/bnfc:generate node/docker
+  #       #- ./scripts/p2p-test-network.sh local && ./scripts/p2p-test-network.sh run-tests 50
+  #     - sudo sbt -Dsbt.log.noformat=true clean rholang/bnfc:generate node/docker
+  #     - sudo ./scripts/p2p-test-network.py -b
