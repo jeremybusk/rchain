@@ -15,12 +15,44 @@ stages:
 #     - docker
 
 
+# build:p2p-test-network:
+#   stage: build
+#   # tags:
+#   #   - docker 
+#   tags:
+#     - alpine37
+#   # image: docker:stable
+#   #image: alpine:latest
+#   # variables:
+#   #   DOCKER_DRIVER: overlay2
+# 
+#   # services:
+#   #   - docker:dind
+# 
+#   # before_script:
+#   # #    - apk update 
+#   # #    - docker info
+#   #   - docker ps
+# 
+#   script:
+#     - export JAVA_HOME="/usr/lib/jvm/java-1.8-openjdk"
+#     - apk update
+#     - apk add bash
+#     - ./scripts/alpine37_install_deps.sh
+#     - ./scripts/install_secp.sh
+#     - ./scripts/install_sodium.sh
+#     - ./scripts/install_bnfc.sh
+#     - sbt -Dsbt.log.noformat=true clean rholang/bnfc:generate node/docker
+#       #- ./scripts/p2p-test-network.sh local && ./scripts/p2p-test-network.sh run-tests 50
+#     - ./scripts/p2p-test-network.py -b
+
+ 
 build:p2p-test-network:
   stage: build
   # tags:
   #   - docker 
   tags:
-    - alpine37
+    - preloaded-ubuntu1604 
   # image: docker:stable
   #image: alpine:latest
   # variables:
@@ -35,18 +67,16 @@ build:p2p-test-network:
   #   - docker ps
 
   script:
-    - export JAVA_HOME="/usr/lib/jvm/java-1.8-openjdk"
-    - apk update
-    - apk add bash
-    - ./scripts/alpine37_install_deps.sh
+      #- export JAVA_HOME="/usr/lib/jvm/java-1.8-openjdk"
+      #- apk update
+      #- apk add bash
+      #- ./scripts/alpine37_install_deps.sh
     - ./scripts/install_secp.sh
     - ./scripts/install_sodium.sh
     - ./scripts/install_bnfc.sh
     - sbt -Dsbt.log.noformat=true clean rholang/bnfc:generate node/docker
       #- ./scripts/p2p-test-network.sh local && ./scripts/p2p-test-network.sh run-tests 50
     - ./scripts/p2p-test-network.py -b
-
- 
   # build:ubuntu1604-p2p-test-network:
   #   stage: build
   #   tags:
