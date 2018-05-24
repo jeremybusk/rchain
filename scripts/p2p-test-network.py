@@ -44,6 +44,34 @@ client = docker.from_env()
 RNODE_CMD = 'java -Dfile.encoding=UTF8 -Djava.net.preferIPv4Stack=true -jar /rnode-assembly-0.3.1.jar'
 
 
+def main():
+    """Main program"""
+    if args.run_tests == True:
+        run_tests()
+        return
+    if args.logs == True:
+        show_logs()
+        return
+    if args.remove == True:
+        remove_resources_by_network(args.network)
+        return
+    if args.deploy_demo == True: # deploy casper demo
+        deploy_demo()
+        return
+    if args.boot == True:
+        remove_resources_by_network(args.network)
+        boot_p2p_network()
+        if not args.skip_convergence_test == True:
+            for container in client.containers.list(all=True, filters={"name":f'bootstrap.{args.network}'}):
+                check_network_convergence(container)
+        time.sleep(10)
+        deploy_demo()
+        if args.tests:
+            time.sleep(10)
+            run_tests()
+            return
+
+
 def run_tests():
     notices ={} 
     notices['fail'] = []
@@ -89,13 +117,15 @@ def run_tests():
 
     print("===========================================================")
     print("=================TEST SUMMARY RESULTS======================")
+    if notices['pass']:
+        for notice in notices['pass']:
+            print(f"PASS: {notice}")
     if notices['fail']:
         for notice in notices['fail']:
             print(f"FAIL: {notice}")
+        print('FAIL: Part or all of tests failed in one or more peer nodes.')
         raise Exception('FAIL: Part or all of tests failed in one or more peer nodes.')
     else:
-        for notice in notices['pass']:
-            print(f"PASS: {notice}")
         print("PASS ALL: All tests successfully passed")
     print("===========================================================")
     print("===========================================================")
@@ -142,34 +172,6 @@ def boot_p2p_network():
     except Exception as e:
         print(e)
         return 1
-
-
-def main():
-    """Main program"""
-    if args.run_tests == True:
-        run_tests()
-        return
-    if args.logs == True:
-        show_logs()
-        return
-    if args.remove == True:
-        remove_resources_by_network(args.network)
-        return
-    if args.deploy_demo == True: # deploy casper demo
-        deploy_demo()
-        return
-    if args.boot == True:
-        remove_resources_by_network(args.network)
-        boot_p2p_network()
-        if not args.skip_convergence_test == True:
-            for container in client.containers.list(all=True, filters={"name":f'bootstrap.{args.network}'}):
-                check_network_convergence(container)
-        time.sleep(10)
-        deploy_demo()
-        if args.tests:
-            time.sleep(10)
-            run_tests()
-            return
 
 
 def var_to_docker_file(var, container_name, file_path):
