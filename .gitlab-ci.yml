@@ -89,9 +89,9 @@ build:p2p-test-network:
     - ./scripts/install_secp.sh
     - ./scripts/install_sodium.sh
     - ./scripts/install_bnfc.sh
-    - sbt -Dsbt.log.noformat=true clean rholang/bnfc:generate node/docker
+    - sudo sbt -Dsbt.log.noformat=true clean rholang/bnfc:generate node/docker
       #- ./scripts/p2p-test-network.sh local && ./scripts/p2p-test-network.sh run-tests 50
-    - ./scripts/p2p-test-network.py -b
+    - sudo ./scripts/p2p-test-network.py -b
   # build:ubuntu1604-p2p-test-network:
   #   stage: build
   #   tags:
