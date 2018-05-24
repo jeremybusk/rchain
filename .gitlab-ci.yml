@@ -30,7 +30,7 @@ cache:
 #     - docker
 
 
-build:p2p-test-network:
+build:p2p-test-network-alpine37:
   stage: build
   # tags:
   #   - docker 
@@ -62,7 +62,7 @@ build:p2p-test-network:
     - ./scripts/p2p-test-network.py -b
 
  
-build:p2p-test-network:
+build:p2p-test-network-ubuntu-preloaded:
   stage: build
   # tags:
   #   - docker 
