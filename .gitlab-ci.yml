@@ -23,8 +23,8 @@ build:p2p-test-network:
     - alpine37
   # image: docker:stable
   image: alpine:latest
-  variables:
-    DOCKER_DRIVER: overlay2
+  # variables:
+  #   DOCKER_DRIVER: overlay2
 
   services:
   - docker:dind
