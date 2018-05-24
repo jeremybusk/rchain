@@ -91,7 +91,7 @@ build:p2p-test-network:
     - ./scripts/install_bnfc.sh
     - sudo sbt -Dsbt.log.noformat=true clean rholang/bnfc:generate node/docker
       #- ./scripts/p2p-test-network.sh local && ./scripts/p2p-test-network.sh run-tests 50
-    - python3.6 -m pip install argparse docker pexpect requests
+    - sudo python3.6 -m pip install argparse docker pexpect requests
     - sudo ./scripts/p2p-test-network.py -b
   # build:ubuntu1604-p2p-test-network:
   #   stage: build
