@@ -15,7 +15,8 @@ apk add bash
 # docker info
 # set -e
 apk add docker # add docker to connect to outside
-service docker start
+#service docker start
+/etc/init.d/docker start
 # if [ $? -ne 0 ]; then
 # apk add openrc
 # apk add docker 
