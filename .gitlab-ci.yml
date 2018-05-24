@@ -29,10 +29,10 @@ build:p2p-test-network:
   services:
   - docker:dind
 
-  #  before_script:
+   before_script:
   #    - apk update 
   #    - docker info
-  #    - docker ps
+     - docker ps
 
   script:
     - export JAVA_HOME="/usr/lib/jvm/java-1.8-openjdk"
