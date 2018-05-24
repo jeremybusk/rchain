@@ -102,10 +102,16 @@ matrix:
 script:
   - ./scripts/build-subprojects.sh
 
+before_cache:
+  - find $HOME/.sbt -name "*.lock" -type f -delete
+  - find $HOME/.ivy2/cache -name "ivydata-*.properties" -type f -delete
+
 cache:
+  timeout: 360 # default is 180 
   directories:
     - "$HOME/.ivy2/cache"
     - "$HOME/.sbt"
+    - "$HOME/.coursier"
 
 after_success:
   - "./scripts/create-artifacts.sh"

@@ -31,7 +31,9 @@ lazy val shared = (project in file("shared"))
     version := "0.1",
     libraryDependencies ++= commonDependencies ++ Seq(
       catsCore,
-      monix
+      monix,
+      scodecCore,
+      scodecBits
     )
   )
 
@@ -51,6 +53,8 @@ lazy val comm = (project in file("comm"))
   .settings(
     version := "0.1",
     libraryDependencies ++= commonDependencies ++ kamonDependencies ++ protobufDependencies ++ Seq(
+      grpcNetty,
+      scalapbRuntimegGrpc,
       scalaUri,
       weupnp,
       hasher,
@@ -105,7 +109,7 @@ lazy val node = (project in file("node"))
       apiServerDependencies ++ commonDependencies ++ kamonDependencies ++ protobufDependencies ++ Seq(
         catsCore,
         grpcNetty,
-        jline, 
+        jline,
         scallop,
         scalaUri,
         scalapbRuntimegGrpc
@@ -160,7 +164,7 @@ lazy val node = (project in file("node"))
     packageArchitecture in Rpm := "noarch",
     maintainerScripts in Rpm := maintainerScriptsAppendFromFile((maintainerScripts in Rpm).value)(
       RpmConstants.Post -> (sourceDirectory.value / "rpm" / "scriptlets" / "post")
-    ),    
+    ),
     rpmPrerequisites := Seq("libsodium >= 1.0.14-1")
   )
   .dependsOn(casper, comm, crypto, rholang)
@@ -223,11 +227,12 @@ lazy val rspace = (project in file("rspace"))
   .settings(commonSettings: _*)
   .settings(
     name := "rspace",
-    version := "0.1.1",
+    version := "0.2.1-SNAPSHOT",
     libraryDependencies ++= commonDependencies ++ Seq(
       lmdbjava,
       catsCore,
       scodecCore,
+      scodecCats,
       scodecBits
     ),
     /* Tutorial */
@@ -275,7 +280,7 @@ lazy val rspace = (project in file("rspace"))
       )
     )
   )
-  .dependsOn(shared)
+  .dependsOn(shared, crypto)
 
 lazy val rspaceBench = (project in file("rspace-bench"))
   .settings(commonSettings, libraryDependencies ++= commonDependencies)

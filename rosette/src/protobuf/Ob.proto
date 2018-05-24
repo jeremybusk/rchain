@@ -9,30 +9,16 @@ package ObjectCodePB;
 
 
 message ObjectCode {
-    // There are two parts to an object code file.
-    //
-    // Part one (CodeBlocks) is a repeated list of code export blocks.
-    // Part two (Objects) is a repeated list of Rosette objects referenced by the code blocks.
-
-    CodeBlocks codeblocks = 1;
-    Objects objects = 2;
-}
-
-message CodeBlocks {
     repeated CodeBlock codeblock = 1;
-}
-
-// This central objects list is for objects that are immutable, and should be accessed by
-// reference.
-message Objects {
-    repeated Object object = 1;
+    ObjectStore objectstore = 2;
 }
 
 // A single code block contains a litvec with objects on which the code operates,
 // and the codevec with the actual opCodes that are executed by the VM.
 message CodeBlock {
-    LitVec litvec = 1;
-    CodeVec codevec = 2;
+    uint64 id = 1;
+    LitVec litvec = 2;
+    CodeVec codevec = 3;
 }
 
 // This message contains the actual executable opCodes
@@ -45,16 +31,15 @@ message LitVec {
     // Items within a Litvec are accessed by index and must be stored in the same order as
     // they originally existed at compile time.
 
-    repeated LitVecItem item = 1; // This ties to object id's within objects in the ObjectVector
+    repeated Object ob = 1;
 }
 
-// A LitVecItem can either contain an instance of the object itself, or an id that ties it
-// to an object in the central objects list.
-message LitVecItem {
-    oneof item {
-        Object ob = 2;
-        uint64 id = 3;
-    }
+message ObjectReference {
+    uint64 id = 1;
+}
+
+message ObjectStore {
+    repeated Object objects = 1;
 }
 
 // Rather than implement all 100+ object types existing in Rosette, We will only implement those
@@ -63,12 +48,18 @@ message LitVecItem {
 // TODO: These messages need to be filled out with the required fields. Also if there are objects that
 // contain other objects, they will need to be added to this list.
 
-message Actor {}
-message BlockExpr {}
+message Actor {
+    Object extension = 1;
+}
+message BlockExpr {
+    Object subExprs = 1;
+    Object implicit = 2;
+}
 message Char {
     uint32 value = 1;
 }
 message Code {
+    // Handle by reference. ID in parent Object.
 }
 message ExpandedLocation {}
 message Fixnum {
@@ -84,24 +75,31 @@ message LabelExpr {}
 message LetExpr {}
 message LetrecExpr {}
 message MethodExpr {}
+message Niv {}
 message Proc {}
 message ProcExpr {}
 message QuoteExpr {}
 message RBLstring {
     string value = 1;
 }
+message RblBool {
+    bool value = 1;
+}
 message ReflectiveMethodExpr {}
 message RequestExpr {}
 message SendExpr {}
 message SeqExpr {}
 message SetExpr {}
+message StdExtension {}
 message StdMthd {}
 message Symbol {
     string name = 1;
 }
 message TblObject {}
 message Template {}
-message Tuple {}
+message Tuple {
+    repeated Object elements = 1;
+}
 message TupleExpr {}
 
 enum ObType {
@@ -134,13 +132,20 @@ enum ObType {
     OT_Template = 26;
     OT_Tuple = 27;
     OT_TupleExpr = 28;
+    OT_RblBool = 29;
+    OT_Niv = 30;
+    OT_StdExtension = 31;
+    OT_unknown = 999;
 }
 
 message Object {
     ObType type = 1;
     uint64 id = 2;
+    uint64 metaId = 3;
+    uint64 parentId = 4;
 
-    // One and only one of these should be populated
+    // One and only one of these should be populated. These contain information specific to the
+    // Object type.
     oneof object {
         Actor actor = 10;
         BlockExpr blockexpr = 11;
@@ -171,5 +176,8 @@ message Object {
         Template template = 36;
         Tuple tuple = 37;
         TupleExpr tupleexpr = 38;
+        RblBool rblbool = 39;
+        Niv niv = 40;
+        StdExtension stdextension = 41;
     }
 }

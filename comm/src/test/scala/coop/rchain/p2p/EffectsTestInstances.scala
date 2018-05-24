@@ -1,5 +1,6 @@
 package coop.rchain.p2p
 
+import java.net.SocketAddress
 import scala.concurrent.duration.{Duration, MILLISECONDS}
 
 import cats._
@@ -37,8 +38,9 @@ object EffectsTestInstances {
     def addNode(node: PeerNode): F[Unit] = Capture[F].capture {
       nodes = node :: nodes
     }
-    def findMorePeers(limit: Int): F[Seq[PeerNode]] = ???
-    def peers: F[Seq[PeerNode]]                     = ???
+    def findMorePeers(limit: Int): F[Seq[PeerNode]]                         = ???
+    def peers: F[Seq[PeerNode]]                                             = ???
+    def handleCommunications: ProtocolMessage => F[Option[ProtocolMessage]] = ???
   }
 
   class TransportLayerStub[F[_]: Capture: Applicative](src: ProtocolNode)
@@ -70,6 +72,8 @@ object EffectsTestInstances {
         Right(())
       }
     def broadcast(msg: ProtocolMessage): F[Seq[CommErr[Unit]]] = ???
+
+    def receive(dispatch: ProtocolMessage => F[Option[ProtocolMessage]]): F[Unit] = ???
   }
 
   import Encryption._
