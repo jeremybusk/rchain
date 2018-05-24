@@ -17,8 +17,8 @@ stages:
 
 build:p2p-test-network:
   stage: build
-  tags:
-    - docker 
+  # tags:
+  #   - docker 
   # tags:
   #   - alpine37
   # image: docker:stable
