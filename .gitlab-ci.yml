@@ -19,20 +19,20 @@ build:p2p-test-network:
   stage: build
   # tags:
   #   - docker 
-  # tags:
-  #   - alpine37
+  tags:
+    - alpine37
   # image: docker:stable
-  image: alpine:latest
+  #image: alpine:latest
   # variables:
   #   DOCKER_DRIVER: overlay2
 
-  services:
-    - docker:dind
+  # services:
+  #   - docker:dind
 
-  before_script:
-  #    - apk update 
-  #    - docker info
-    - docker ps
+  # before_script:
+  # #    - apk update 
+  # #    - docker info
+  #   - docker ps
 
   script:
     - export JAVA_HOME="/usr/lib/jvm/java-1.8-openjdk"
