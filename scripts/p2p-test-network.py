@@ -12,6 +12,7 @@ import time
 import sys
 
 # default_domain = 'rchain.coop'
+# return code of 0 is success on test and 1 is fail
 
 parser = argparse.ArgumentParser()
 # parser.add_argument("-g", "--grpc-host", dest='grpc_host', default="peer0.rchain.coop", help="set grpc host")
