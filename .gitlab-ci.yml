@@ -61,7 +61,6 @@ build:p2p-test-network-alpine37:
   # before_script:
   # #    - apk update 
   # #    - docker info
-  #   - docker ps
 
   script:
     - export JAVA_HOME="/usr/lib/jvm/java-1.8-openjdk"
