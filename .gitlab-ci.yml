@@ -58,8 +58,10 @@ build:p2p-test-network-alpine37:
   # services:
   #   - docker:dind
 
-  # before_script:
-  # #    - apk update 
+  before_script:
+    - apk update 
+    - apk add bash 
+  #    - apk update 
   # #    - docker info
   # test1
 
