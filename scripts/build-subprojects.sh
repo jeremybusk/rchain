@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -e
+set -exo pipefail
 
 case "$SUBPROJECT" in "rosette")
 
@@ -56,7 +56,7 @@ case "$SUBPROJECT" in "rosette")
 
     cd ${TRAVIS_BUILD_DIR}
 
-    scripts/rholang-more-tests-main.sh
+    sudo scripts/rholang-more-tests-main.sh
     ;;
 
 *)
