@@ -100,6 +100,10 @@ matrix:
     env: SUBPROJECT=rholang_more_tests
 
 script:
+  - apk update
+  - apk add bash
+  - set -exo pipefail
+  - bash
   - ./scripts/build-subprojects.sh
 
 before_cache:
@@ -133,4 +137,4 @@ notifications:
   email:
     recipients: rchain-makers@pyrofex.net
     on_success: never
-    on_failure: always
+    on_failure: never 

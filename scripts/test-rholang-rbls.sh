@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 export PATH=$PATH:$(pwd -P)/scripts
 source header.sh
+set -exo pipefail
 
 export ESS_SYSDIR=${ROSETTE_ROOT_DIR}/result/lib/rosette
 # Increase stack limit so that Rosette can load all files

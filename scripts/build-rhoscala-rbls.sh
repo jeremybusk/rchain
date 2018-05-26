@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 export PATH=$PATH:$(pwd -P)/scripts
 source header.sh
+set -exo pipefail
 
 sbt -Dsbt.log.noformat=true clean rholang/bnfc:generate
 sbt -Dsbt.log.noformat=true rholang/compile 
