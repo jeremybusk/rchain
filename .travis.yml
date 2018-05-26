@@ -3,26 +3,26 @@ dist: trusty
 
 matrix:
   include:
-      #   - language: nix
-      #     env: SUBPROJECT=rosette
-      #   - language: scala
-      #     env: SUBPROJECT=core
-      #     scala: 2.12.4
-      #     sbt_args: -no-colors
-      #     install:
-      #       - ./scripts/install_secp.sh
-      #       - ./scripts/install_sodium.sh
-      #       - ./scripts/install.sh
-      #     addons:
-      #       apt:
-      #         sources:
-      #           - sourceline: 'deb https://dl.bintray.com/sbt/debian /'
-      #         packages:
-      #           - sbt
-      #           - jflex
-      #           - haskell-platform
-      #           - rpm
-      #           - fakeroot
+   - language: nix
+     env: SUBPROJECT=rosette
+#    - language: scala
+#      env: SUBPROJECT=core
+#      scala: 2.12.4
+#      sbt_args: -no-colors
+#      install:
+#        - ./scripts/install_secp.sh
+#        - ./scripts/install_sodium.sh
+#        - ./scripts/install.sh
+#      addons:
+#        apt:
+#          sources:
+#            - sourceline: 'deb https://dl.bintray.com/sbt/debian /'
+#          packages:
+#            - sbt
+#            - jflex
+#            - haskell-platform
+#            - rpm
+#            - fakeroot
       #   - language: scala
       #     env: SUBPROJECT=test_artifact_creation
       #     scala: 2.12.4
@@ -99,20 +99,25 @@ matrix:
       #           - bash
   - language: nix 
     env: SUBPROJECT=rholang_more_tests
+     scala: 2.12.4
+     sbt_args: -no-colors
+     install:
+       - ./scripts/install_secp.sh
+       - ./scripts/install_sodium.sh
+       - ./scripts/install.sh
+     addons:
+       apt:
+         sources:
+           - sourceline: 'deb https://dl.bintray.com/sbt/debian /'
+         packages:
+           - sbt
+           - jflex
+           - haskell-platform
+           - rpm
+           - fakeroot
 
 script:
   - ./scripts/build-subprojects.sh
-
-before_cache:
-  - find $HOME/.sbt -name "*.lock" -type f -delete
-  - find $HOME/.ivy2/cache -name "ivydata-*.properties" -type f -delete
-
-cache:
-  timeout: 360 # default is 180 
-  directories:
-    - "$HOME/.ivy2/cache"
-    - "$HOME/.sbt"
-    - "$HOME/.coursier"
 
 after_success:
   - "./scripts/create-artifacts.sh"
