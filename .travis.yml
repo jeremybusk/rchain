@@ -96,6 +96,7 @@ matrix:
           - haskell-platform
           - rpm
           - fakeroot
+          - bash
   - language: nix 
     env: SUBPROJECT=rholang_more_tests
 
