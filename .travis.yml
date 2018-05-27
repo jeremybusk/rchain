@@ -99,7 +99,7 @@ matrix:
   - language: nix 
     env: SUBPROJECT=rholang_more_tests
     install:
-      - ./scripts/install_secp.sh
+        # - ./scripts/install_secp.sh
       - ./scripts/install_sodium.sh
 
 script:
