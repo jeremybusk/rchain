@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -e
+set -exo pipefail
 
 case "$SUBPROJECT" in "rosette")
 

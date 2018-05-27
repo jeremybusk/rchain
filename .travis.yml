@@ -103,7 +103,6 @@ script:
     #- apk update
     #- apk add bash
   - set -exo pipefail
-  - bash
   - ./scripts/build-subprojects.sh
 
 before_cache:
