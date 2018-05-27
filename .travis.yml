@@ -100,8 +100,8 @@ matrix:
     env: SUBPROJECT=rholang_more_tests
 
 script:
-  - apk update
-  - apk add bash
+    #- apk update
+    #- apk add bash
   - set -exo pipefail
   - bash
   - ./scripts/build-subprojects.sh
