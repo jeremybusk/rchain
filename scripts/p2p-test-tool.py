@@ -41,11 +41,11 @@ parser.add_argument("-i", "--image",
 parser.add_argument("-l", "--logs",
                     action='store_true',
                     help="show all node logs")
-parser.add_argument("-m", "--memory",
-                    dest='memory',
+parser.add_argument("-m", "--mem_limit",
+                    dest='mem_limit',
                     type=str,
                     default="1024m",
-                    help="1024m set docker memory for repl client node")
+                    help="1024m set docker memory limit for nodes")
 parser.add_argument("-n", "--network",
                     dest='network',
                     type=str,
@@ -203,6 +203,7 @@ def deploy_demo():
             print(e)
 
 def test_node_eval_of_rholang_files(container):
+    print("Evaluating node /usr/share/rnode/examples/ rho file examples.")
     print(container.name)
     cmd = f"ls /usr/share/rnode/examples/*.rho"
     r = container.exec_run(['sh', '-c', cmd])
@@ -276,7 +277,7 @@ def remove_resources_by_network(args_network):
 
     for network in client.networks.list():
         if args_network == network.name:
-            print(f"removing {network.name}")
+            print(f"Removing docker network {network.name} resources.")
             network.remove()
     # client.volumes.prune() # removes unused volumes
     return 0
@@ -287,24 +288,21 @@ def create_bootstrap_node():
     bootstrap_node = {}
     bootstrap_node['name'] = f"bootstrap.{args.network}"
     bootstrap_node['volume'] = client.volumes.create()
-    print(f"creating {bootstrap_node['name']}")
+    print(f"Creating {bootstrap_node['name']}")
     container = client.containers.run(args.image, \
         name=bootstrap_node['name'], \
         detach=True, \
         cpuset_cpus=args.cpuset_cpus, \
-        mem_limit=args.memory, \
+        mem_limit=args.mem_limit, \
         network=args.network, \
         volumes={bootstrap_node['volume'].name: {'bind': args.rnode_directory, 'mode': 'rw'}}, \
         command=args.bootstrap_command, \
         hostname=bootstrap_node['name'])
 
-    # Add additional packages.
+    print("Installing additional packages to boostrap node container.")
     r = container.exec_run(cmd='apt-get update').output.decode("utf-8")
-    print(r)
     r = container.exec_run(cmd='apt-get -yq install curl').output.decode("utf-8")
-    print(r)
     r = container.exec_run(cmd='apt-get -yq install nmap').output.decode("utf-8")
-    print(r)
     return 0
 
 
@@ -315,24 +313,21 @@ def create_peer_nodes():
         peer_node[i] = {}
         peer_node[i]['name'] = f"peer{i}.{args.network}"
         peer_node[i]['volume'] = client.volumes.create()
-        print(f"creating {peer_node[i]['name']}")
+        print(f"Creating {peer_node[i]['name']}")
         container = client.containers.run(args.image, \
             name=peer_node[i]['name'], \
             detach=True, \
             cpuset_cpus=args.cpuset_cpus, \
-            mem_limit=args.memory, \
+            mem_limit=args.mem_limit, \
             network=args.network, \
             volumes=[f"{peer_node[i]['volume'].name}:{args.rnode_directory}"], \
             command=args.peer_command, \
             hostname=peer_node[i]['name'])
 
-        # Add additional packages.
+        print("Installing additional packages to peer node containers.")
         r = container.exec_run(cmd='apt-get update').output.decode("utf-8")
-        print(r)
         r = container.exec_run(cmd='apt-get -yq install curl').output.decode("utf-8")
-        print(r)
         r = container.exec_run(cmd='apt-get -yq install nmap').output.decode("utf-8")
-        print(r)
     return 0
       
 
@@ -352,6 +347,7 @@ def test_network_sockets(container):
 
 def test_repl_load(container):
     """Load REPL with commands."""
+    print(f"Loading REPL with commands.")
 
     # Remove any existing repl containers if they exist
     for repl_container in client.containers.list(all=True, filters={"name":f"repl\d.{args.network}"}):
@@ -367,7 +363,7 @@ def test_repl_load(container):
             repl_node[i]['volume'] = client.volumes.create()
 
             cmd = (f"sudo docker run --rm -it -v {repl_node[i]['volume'].name}:{args.rnode_directory} "
-                   f"--cpuset-cpus={args.cpuset_cpus} --memory={args.memory} --name {repl_node[i]['name']} "
+                   f"--cpuset-cpus={args.cpuset_cpus} --memory={args.mem_limit} --name {repl_node[i]['name']} "
                    f"--network {args.network} {args.image} "
                    f"--grpc-host {container.name} -r")
             print(f"docker repl cmd: {cmd}")
