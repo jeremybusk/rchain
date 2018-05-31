@@ -84,7 +84,7 @@ build:p2p-test-network-ubuntu-preloaded:
   # tags:
   #   - docker 
   tags:
-    - preloaded-ubuntu1604 
+    - preloaded-ubuntu1804 
   # image: docker:stable
   #image: alpine:latest
   # variables:
@@ -102,10 +102,10 @@ build:p2p-test-network-ubuntu-preloaded:
       #- export JAVA_HOME="/usr/lib/jvm/java-1.8-openjdk"
       #- apk update
       #- apk add bash
-      #- ./scripts/alpine37_install_deps.sh
-    - ./scripts/install_secp.sh
-    - ./scripts/install_sodium.sh
-    - ./scripts/install_bnfc.sh
+      # - ./scripts/alpine37_install_deps.sh
+      # - ./scripts/install_secp.sh
+      # - ./scripts/install_sodium.sh
+      # - ./scripts/install_bnfc.sh
     - sudo sbt -Dsbt.log.noformat=true clean rholang/bnfc:generate node/docker
       #- ./scripts/p2p-test-network.sh local && ./scripts/p2p-test-network.sh run-tests 50
     - sudo python3.6 -m pip install argparse docker pexpect requests
@@ -128,3 +128,12 @@ build:p2p-test-network-ubuntu-preloaded:
   #       #- ./scripts/p2p-test-network.sh local && ./scripts/p2p-test-network.sh run-tests 50
   #     - sudo sbt -Dsbt.log.noformat=true clean rholang/bnfc:generate node/docker
   #     - sudo ./scripts/p2p-test-network.py -b
+
+  # build:p2p-test-network-ubuntu-preloaded:
+  #   stage: build
+  #   # tags:
+  #   #   - docker 
+  #   tags:
+  #     - preloaded-ubuntu1604 
+  #   script:
+  #     sbt -Dsbt.log.noformat=true clean rholang/bnfc:generate coverage test coverageReport 
