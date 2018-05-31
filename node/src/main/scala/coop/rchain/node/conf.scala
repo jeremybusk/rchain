@@ -1,7 +1,7 @@
 package coop.rchain.node
 
 import java.net.{InetAddress, NetworkInterface}
-import java.nio.file.{Files, Path, Paths}
+import java.nio.file.{Path, Paths}
 
 import com.typesafe.scalalogging.Logger
 import coop.rchain.comm.UPnP
@@ -14,16 +14,20 @@ final case class Conf(arguments: Seq[String]) extends ScallopConf(arguments) {
 
   val diagnostics = opt[Boolean](default = Some(false), short = 'd', descr = "Node diagnostics")
 
-  val name =
-    opt[String](default = None,
-                short = 'n',
-                descr = "Node name or key (deprecated, will be removed in next release).")
+  val certificate =
+    opt[Path](
+      required = false,
+      short = 'c',
+      descr = "Path to node's X.509 certificate file, that is being used for identification")
+
+  val key =
+    opt[Path](required = false,
+              short = 'k',
+              descr =
+                "Path to node's private key PEM file, that is being used for TLS communication")
 
   val port =
-    opt[Int](default = Some(30304),
-             short = 'p',
-             descr =
-               "Network port to use. Currently UDP port, will become TCP port in next release.")
+    opt[Int](default = Some(30304), short = 'p', descr = "Network port to use.")
 
   val httpPort =
     opt[Int](default = Some(8080),
@@ -49,7 +53,8 @@ final case class Conf(arguments: Seq[String]) extends ScallopConf(arguments) {
   )
 
   val bootstrap =
-    opt[String](default = Some("rnode://0f365f1016a54747b384b386b8e85352@216.83.154.106:30012"),
+    opt[String](default =
+                  Some("rnode://acd0b05a971c243817a0cfd469f5d1a238c60294@216.83.154.106:30304"),
                 short = 'b',
                 descr = "Bootstrap rnode address for initial seed.")
 
@@ -108,11 +113,19 @@ final case class Conf(arguments: Seq[String]) extends ScallopConf(arguments) {
     default = None,
     descr = "Base16 encoding of the Ed25519 private key to use for signing a proposed block.")
 
-  def fetchHost(): String =
+  lazy val localhost: String =
     host.toOption match {
       case Some(host) => host
       case None       => whoami(port()).fold("localhost")(_.getHostAddress)
     }
+
+  def certificatePath: Path =
+    certificate.toOption
+      .getOrElse(Paths.get(data_dir().toString, "node.certificate.pem"))
+
+  def keyPath: Path =
+    certificate.toOption
+      .getOrElse(Paths.get(data_dir().toString, "node.key.pem"))
 
   private def whoami(port: Int): Option[InetAddress] = {
 

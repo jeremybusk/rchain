@@ -53,18 +53,30 @@ object Runtime {
     lazy val dispatcher: Dispatch[Task, Seq[Channel], TaggedContinuation] =
       RholangAndScalaDispatcher.create(store, dispatchTable)
 
-    lazy val dispatchTable = Map(
+    lazy val dispatchTable: Map[Ref, Seq[Seq[Channel]] => Task[Unit]] = Map(
       0L -> SystemProcesses.stdout,
       1L -> SystemProcesses.stdoutAck(store, dispatcher),
       2L -> SystemProcesses.stderr,
-      3L -> SystemProcesses.stderrAck(store, dispatcher)
+      3L -> SystemProcesses.stderrAck(store, dispatcher),
+      4L -> SystemProcesses.ed25519Verify(store, dispatcher),
+      5L -> SystemProcesses.sha256Hash(store, dispatcher),
+      6L -> SystemProcesses.keccak256Hash(store, dispatcher),
+      7L -> SystemProcesses.blake2b256Hash(store, dispatcher)
+      //TODO: once we have secp256k1 packaged as jar
+//      9L -> SystemProcesses.secp256k1Verify(store, dispatcher)
     )
 
     val procDefs: immutable.Seq[(Name, Arity, Remainder, Ref)] = List(
       ("stdout", 1, None, 0L),
       ("stdoutAck", 2, None, 1L),
       ("stderr", 1, None, 2L),
-      ("stderrAck", 2, None, 3L)
+      ("stderrAck", 2, None, 3L),
+      ("ed25519Verify", 4, None, 4L),
+      ("sha256Hash", 2, None, 5L),
+      ("keccak256Hash", 2, None, 6L),
+      ("blake2b256Hash", 2, None, 7L)
+      //TODO: once we have secp256k1 packaged as jar
+//      ("secp256k1Verify", 4, None, 9L)
     )
 
     val res: Seq[Option[(TaggedContinuation, Seq[Seq[Channel]])]] =
