@@ -85,7 +85,8 @@ build:p2p-test-network-ubuntu-preloaded:
   # tags:
   #   - docker 
   tags:
-    - preloaded-ubuntu1804 
+    - preloaded-ubuntu1604 
+      # - preloaded-ubuntu1804 
   # image: docker:stable
   #image: alpine:latest
   # variables:
@@ -110,7 +111,7 @@ build:p2p-test-network-ubuntu-preloaded:
     - sudo sbt -Dsbt.log.noformat=true clean rholang/bnfc:generate node/docker
       #- ./scripts/p2p-test-network.sh local && ./scripts/p2p-test-network.sh run-tests 50
     - sudo python3.6 -m pip install argparse docker pexpect requests
-    - sudo ./scripts/p2p-test-network.py -b
+    - sudo ./scripts/p2p-test-tool.py -b -p 1
   # build:ubuntu1604-p2p-test-network:
   #   stage: build
   #   tags:
