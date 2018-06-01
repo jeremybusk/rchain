@@ -143,3 +143,4 @@ build:p2p-test-network-ubuntu-preloaded:
   #   script:
   #     sbt -Dsbt.log.noformat=true clean rholang/bnfc:generate coverage test coverageReport 
 #test
+#test
