@@ -86,7 +86,7 @@ build:p2p-test-network-ubuntu-preloaded:
   #   - docker 
   tags:
       #- preloaded-ubuntu1604 
-    - fthis2-preloaded-ubuntu1804 
+    - preloaded-ubuntu1804 
   # image: docker:stable
   #image: alpine:latest
   # variables:
