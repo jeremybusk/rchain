@@ -108,6 +108,8 @@ build:p2p-test-network-ubuntu-preloaded:
       # - ./scripts/install_secp.sh
       # - ./scripts/install_sodium.sh
     - ./scripts/install_bnfc.sh
+    - sudo apt-get update
+    - sudo apt-get install sbt
     - sudo sbt -Dsbt.log.noformat=true clean rholang/bnfc:generate node/docker
       #- ./scripts/p2p-test-network.sh local && ./scripts/p2p-test-network.sh run-tests 50
     - sudo python3.6 -m pip install argparse docker pexpect requests
