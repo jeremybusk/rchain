@@ -9,7 +9,8 @@ variables:
 
 
 cache:
-  key: "$CI_BUILD_REF_NAME" # contains either the branch or the tag, so it's caching per branch
+    # key: "$CI_BUILD_REF_NAME" # contains either the branch or the tag, so it's caching per branch
+  key: "test1" # contains either the branch or the tag, so it's caching per branch
   untracked: true
   paths:
     - "sbt-cache/ivy/cache"
