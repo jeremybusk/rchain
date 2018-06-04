@@ -2,13 +2,10 @@
 export PATH=$PATH:$(pwd -P)/scripts
 source header.sh
 
-sbt -Dsbt.log.noformat=true clean rholang/bnfc:generate
-sbt -Dsbt.log.noformat=true rholang/compile 
-sbt -Dsbt.log.noformat=true rholang/assembly 
-sbt -Dsbt.log.noformat=true rholangCLI/assembly
+sbt -Dsbt.log.noformat=true clean rholang/bnfc:generate rholangCLI/assembly
 
-jar=$(ls -t ${RHOLANG_ROOT_DIR}/target/scala*/*.jar | head -1)
-# the above is usually file like rholang/target/scala-2.12/rholang-assembly-0.1.0-SNAPSHOT.jar
+jar=$(ls -t ${RHOLANG_CLI_ROOT_DIR}/target/scala*/*.jar | head -1)
+# the above is usually file like rholang-cli/target/scala-2.12/rholangCLI-assembly-0.1.0-SNAPSHOT.jar
 
 for rho_file in $(ls ${RHOLANG_ROOT_DIR}/tests/*.rho); do
     rbl_file=$(echo ${rho_file} | cut -f 1 -d '.').rbl
