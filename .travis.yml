@@ -2,7 +2,7 @@ sudo: required
 dist: trusty
 jdk:
   - openjdk8
-bundler_args: --retry 5 # default is 3
+    # bundler_args: --retry 5 # default is 3
 
 matrix:
   include:
@@ -10,10 +10,10 @@ matrix:
     env: SUBPROJECT=rosette
   - language: scala
     env: SUBPROJECT=core
-    scala: 2.12.4
+    scala: 2.12.6
     sbt_args: -no-colors
     install:
-      - ./scripts/install_sbt.sh
+        #- ./scripts/install_sbt.sh
       - ./scripts/install.sh
     addons:
       apt:
