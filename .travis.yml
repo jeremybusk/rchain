@@ -2,7 +2,7 @@ sudo: required
 dist: trusty
 jdk:
   - openjdk8
-bundler_args: --retry 5
+bundler_args: --retry 5 # default is 3
 
 matrix:
   include:
